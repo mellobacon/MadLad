@@ -11,6 +11,7 @@ namespace MadLad.Lexer
         SyntaxKind Kind;
         object Value;
         char Current => Peek(0); // Sets the current character to whatever
+        
         readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
         
@@ -125,12 +126,20 @@ namespace MadLad.Lexer
                     _text = ")";
                     Advance();
                     break;
-                default:
-                    if (char.IsDigit(Current))
-                    {
-                        ReadNumberToken();
-                    }
-                    else if (char.IsWhiteSpace(Current))
+                case '0': case '1': case '2':
+                case '3': case '4': case '5':
+                case '6': case '7': case '8':
+                case '9':   
+                    ReadNumberToken();
+                    break;
+                case ' ':
+                case '\n':
+                case '\t':
+                case '\r':
+                    ReadWhiteSpaceToken();
+                    break;
+                default: 
+                    if (char.IsWhiteSpace(Current))
                     {
                         ReadWhiteSpaceToken();
                     }
