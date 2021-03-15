@@ -6,7 +6,7 @@ namespace MadLad
 {
     internal static class Program
     {
-        const string prompt = "> ";
+        static string prompt = "> ";
         const string command_prompt = "#";
         static void Main()
         {
@@ -62,11 +62,26 @@ namespace MadLad
                     {
                         foreach (var error in errors)
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.WriteLine(error.Details);
-                            Console.ResetColor();
-                        }
+                            var prefix = input.Substring(0, error.Span.Start);
+                            var occurance = input.Substring(error.Span.Start, error.Span.Length);
+                            var suffix = input.Substring(error.Span.End);
 
+                            // Print the message
+                            Console.Write($"{error.Details} at: ");
+                            
+                            // Print what is before the error
+                            Console.WriteLine("   ");
+                            Console.Write(prefix);
+                        
+                            // Print where the error occurs
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.Write(occurance);
+                            Console.ResetColor();
+                        
+                            // Print what is after the error
+                            Console.Write(suffix);
+                            Console.WriteLine();
+                        }
                         break;
                     }
                 }
@@ -90,7 +105,16 @@ namespace MadLad
             else if (command.Contains($"{command_prompt}DEBUG"))
             {
                 debug = !debug;
-                Console.WriteLine(debug ? "Debug Mode Enabled" : "Debug Mode Disabled");
+                if (debug)
+                {
+                    Console.WriteLine("Debug Mode Enabled");
+                    prompt = "DEBUG> ";
+                }
+                else
+                {
+                    Console.WriteLine("Debug Mode Disabled");
+                    prompt = "> ";
+                }
                 showbasiclexer = false;
                 showfullexer = false;
             }
