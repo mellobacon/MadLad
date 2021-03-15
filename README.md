@@ -1,2 +1,2 @@
-# MadLad *being rewritten*
+# MadLad (*being rewritten*)
 A developing esolang
