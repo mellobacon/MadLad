@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MadLad.Lexer
+﻿namespace MadLad.Lexer
 {
     public class Lexer
     {
@@ -11,7 +9,7 @@ namespace MadLad.Lexer
         SyntaxKind Kind;
         object Value;
         char Current => Peek(0); // Sets the current character to whatever
-        
+
         readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
         
@@ -26,7 +24,7 @@ namespace MadLad.Lexer
         {
             Position++;
         }
-
+        
         // returns the char at whatever position depending on the offset
         private char Peek(int offset)
         {
@@ -145,7 +143,7 @@ namespace MadLad.Lexer
                     }
                     else
                     {
-                        ErrorList.ReportBadCharacter(Current);
+                        ErrorList.ReportBadCharacter(Position, Current);
                     }
                     break;
             }
