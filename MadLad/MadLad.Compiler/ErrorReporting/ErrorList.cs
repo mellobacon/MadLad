@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace MadLad.Lexer
 {
+    // a list of errors to call when theres an error
     public class ErrorList : IEnumerable<Error>
     {
         readonly List<Error> Errors = new();
@@ -10,15 +11,16 @@ namespace MadLad.Lexer
         public IEnumerator<Error> GetEnumerator() => Errors.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         
-        private void Report(string message)
+        private void Report(TextSpan span, string message)
         {
-            var error = new Error(message);
+            var error = new Error(span, message);
             Errors.Add(error);
         }
-        public void ReportBadCharacter(char character)
+        public void ReportBadCharacter(int position, char character)
         {
             var message = $"Error: Illegal character: '{character}'";
-            Report(message);
+            var span = new TextSpan(position, 1);
+            Report(span, message);
         }
     }
 }
