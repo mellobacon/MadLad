@@ -1,4 +1,4 @@
-﻿namespace MadLad.Lexer
+﻿namespace MadLad.MadLad.Compiler.ErrorReporting
 {
     public class Error
     {

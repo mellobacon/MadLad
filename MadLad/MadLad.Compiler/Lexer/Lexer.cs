@@ -1,4 +1,6 @@
-﻿namespace MadLad.Lexer
+﻿using MadLad.MadLad.Compiler.ErrorReporting;
+
+namespace MadLad.MadLad.Compiler.Lexer
 {
     public class Lexer
     {

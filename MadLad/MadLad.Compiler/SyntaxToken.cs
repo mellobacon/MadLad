@@ -1,4 +1,4 @@
-﻿namespace MadLad.Lexer
+﻿namespace MadLad.MadLad.Compiler
 {
     public class SyntaxToken
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using MadLad.Lexer;
+using MadLad.MadLad.Compiler;
 
-namespace MadLad
+namespace MadLad.MadLad
 {
     internal static class Program
     {
@@ -11,6 +11,12 @@ namespace MadLad
         static void Main()
         {
             Console.WriteLine("MadLad Compooler but its a REPL instead");
+            Console.WriteLine("Commands:");
+            Console.WriteLine("#DEBUG");
+            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
+            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
+            Console.WriteLine("#clear");
+            Console.WriteLine("#exit");
             while (true)
             {
                 Console.Write(prompt);
@@ -19,12 +25,15 @@ namespace MadLad
                 {
                     return;
                 }
+
                 if (input.StartsWith("#"))
+                {
                     ProcessCommand(input);
+                }
                 else
                 {
                     // blah blah compiler stuff
-                    var Lexer = new Lexer.Lexer(input);
+                    var Lexer = new Compiler.Lexer.Lexer(input);
                     while (true)
                     {
                         var errors = Lexer.Errors;

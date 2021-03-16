@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace MadLad.Lexer
+namespace MadLad.MadLad.Compiler.ErrorReporting
 {
     // a list of errors to call when theres an error
     public class ErrorList : IEnumerable<Error>
