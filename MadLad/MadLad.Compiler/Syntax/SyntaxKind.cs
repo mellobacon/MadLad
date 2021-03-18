@@ -1,4 +1,4 @@
-﻿namespace MadLad.MadLad.Compiler
+﻿namespace MadLad.MadLad.Compiler.Syntax
 {
     /// <summary>
     /// Represents what kind of syntax token the token can be
@@ -16,6 +16,12 @@
         OpenParenToken,
         CloseParenToken,
         
+        // Expressions
+        LiteralExpression,
+        BinaryExpression,
+        GroupedExpression,
+        UnaryExpression,
+
         // Empty
         BadToken,
         EOFToken,
