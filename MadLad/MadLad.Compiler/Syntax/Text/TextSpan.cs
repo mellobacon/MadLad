@@ -1,4 +1,4 @@
-﻿namespace MadLad.MadLad.Compiler
+﻿namespace MadLad.MadLad.Compiler.Syntax.Text
 {
     public class TextSpan
     {
