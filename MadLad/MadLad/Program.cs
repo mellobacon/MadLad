@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using MadLad.MadLad.Compiler;
+using MadLad.MadLad.Compiler.Syntax;
+using MadLad.MadLad.Compiler.Syntax.Lexer;
 
 namespace MadLad.MadLad
 {
@@ -33,70 +34,64 @@ namespace MadLad.MadLad
                 else
                 {
                     // blah blah compiler stuff
-                    var Lexer = new Compiler.Lexer.Lexer(input);
-                    while (true)
+                    // TODO Fix error reporting
+                    var syntaxtree = SyntaxTree.Parse(input);
+                    var errors = syntaxtree.Errors;
+                    if (showtree)
                     {
-                        var errors = Lexer.Errors;
-                        var token = Lexer.Lex();
-                        if (token.Kind == SyntaxKind.EOFToken)
-                        {
-                            Console.WriteLine();
-                            break;
-                        }
+                        ShowTree(syntaxtree.Root);   
+                    }
 
-                        if (showbasiclexer)
+                    // TODO Fix lexer debugging
+                    if (showbasiclexer || showfullexer)
+                    {
+                        while (true)
                         {
-                            if (token.Kind != SyntaxKind.WhitespaceToken && token.Value != null)
+                            var lexer = new Lexer(input);
+                            var token = lexer.Lex();
+                        
+                            if (token.Kind == SyntaxKind.EOFToken)
                             {
-                                Console.Write($"[{token.Kind}:{token.Value}]");   
+                                Console.WriteLine();
+                                break;
                             }
-                            else if (token.Kind != SyntaxKind.WhitespaceToken)
-                            {
-                                Console.Write($"[{token.Kind}]");
-                            }
-                        }
-
-                        if (showfullexer)
-                        {
-                            object value;
-                            if (token.Value == null)
-                            {
-                                value = "";
-                            }
-                            else
-                            {
-                                value = $"({token.Value.GetType()})";
-                            }
-                            Console.WriteLine($"Text:'{token.Text}'---Type:{token.Kind}---Value{value}:{token.Value}");
-                        }
-                        if (errors.Any())
-                        {
                             if (showbasiclexer)
                             {
-                                Console.WriteLine();
+                                ShowBasicLexer(token);
                             }
-                            foreach (var error in errors)
+
+                            if (showfullexer)
                             {
-                                var prefix = input.Substring(0, error.Span.Start);
-                                var occurance = input.Substring(error.Span.Start, error.Span.Length);
-                                var suffix = input.Substring(error.Span.End);
-                                // Print the message
-                                Console.Write($"{error.Details} at: ");
-                                
-                                // Print what is before the error
-                                Console.WriteLine("   ");
-                                Console.Write(prefix);
-                            
-                                // Print where the error occurs
-                                Console.ForegroundColor = ConsoleColor.DarkRed;
-                                Console.Write(occurance);
-                                Console.ResetColor();
-                            
-                                // Print what is after the error
-                                Console.Write(suffix);
-                                Console.WriteLine();
+                                ShowFullLexer(token);
                             }
+
                             break;
+                        }
+                    }
+
+                    if (errors.Any())
+                    {
+                        foreach (var error in errors)
+                        {
+                            var prefix = input.Substring(0, error.Span.Start);
+                            var occurrence = input.Substring(error.Span.Start, error.Span.Length);
+                            var suffix = input.Substring(error.Span.End);
+                            
+                            // Print the message
+                            Console.Write($"{error} at: ");
+                                
+                            // Print what is before the error
+                            Console.WriteLine("   ");
+                            Console.Write(prefix);
+                            
+                            // Print where the error occurs
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.Write(occurrence);
+                            Console.ResetColor();
+                            
+                            // Print what is after the error
+                            Console.Write(suffix);
+                            Console.WriteLine();
                         }
                     }
                 }
@@ -105,6 +100,7 @@ namespace MadLad.MadLad
         
         static bool showbasiclexer;
         static bool showfullexer;
+        static bool showtree;
         static bool debug;
         private static void ProcessCommand(string command)
         {
@@ -132,18 +128,109 @@ namespace MadLad.MadLad
                 }
                 showbasiclexer = false;
                 showfullexer = false;
+                showtree = false;
             }
             else if (command.Contains($"{command_prompt}showlexer --basic") && debug)
             {
-                showbasiclexer = true;
+                showbasiclexer = !showbasiclexer;
                 showfullexer = false;
-                Console.WriteLine("Basic Lexer Enabled");
+                Console.WriteLine(showbasiclexer ? "Basic Lexer Enabled" : "Basic Lexer Disabled");
             }
             else if (command.Contains($"{command_prompt}showlexer --full") && debug)
             {
-                showfullexer = true;
+                showfullexer = !showfullexer;
                 showbasiclexer = false;
-                Console.WriteLine("Full Lexer Enabled");
+                Console.WriteLine(showfullexer ? "Full Lexer Enabled" : "Full Lexer Disabled");
+            }
+            else if (command.Contains($"{command_prompt}showtree") && debug)
+            {
+                showtree = !showtree;
+                Console.WriteLine(showtree ? "Syntax Tree Enabled" : "Syntax Tree Disabled");
+            }
+        }
+
+        static void ShowBasicLexer(SyntaxToken token)
+        {
+            if (token.Kind != SyntaxKind.WhitespaceToken && token.Value != null)
+            {
+                Console.Write($"[{token.Kind}:{token.Value}]");   
+            }
+            else if (token.Kind != SyntaxKind.WhitespaceToken)
+            {
+                Console.Write($"[{token.Kind}]");
+            }
+        }
+
+        static void ShowFullLexer(SyntaxToken token)
+        {
+            object value;
+            if (token.Value == null)
+            {
+                value = "";
+            }
+            else
+            {
+                value = $"({token.Value.GetType()})";
+            }
+            Console.WriteLine($"Text:'{token.Text}'---Type:{token.Kind}---Value{value}:{token.Value}");   
+        }
+        
+        static void ShowTree(SyntaxNode node, string indent = "", bool isLast = true)
+        {
+            var marker = isLast ? "└──" : "├──";
+            
+            Console.Write(indent);
+            Console.Write(marker);
+
+            switch (node.Kind)
+            {
+                case SyntaxKind.BinaryExpression:
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                case SyntaxKind.GroupedExpression:
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                case SyntaxKind.UnaryExpression:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                case SyntaxKind.LiteralExpression:
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                default:
+                    Console.ResetColor();
+                    Console.Write(node.Kind);
+                    break;
+            }
+
+            if (node is SyntaxToken t && t.Value != null)
+            {
+                Console.Write(" ");
+                Console.Write(t.Value);
+            }
+
+            Console.WriteLine();
+
+            indent += isLast ? "   " : "│  ";
+
+            var last = node.GetChildren().LastOrDefault();
+
+            foreach (var child in node.GetChildren())
+            {
+                ShowTree(child, indent, child == last);
             }
         }
     }
