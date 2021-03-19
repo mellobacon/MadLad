@@ -5,7 +5,7 @@ namespace MadLad.MadLad.Compiler.ErrorReporting
     public class Error
     {
         public readonly TextSpan Span;
-        readonly string Details;
+        public readonly string Details;
 
         // Defines what makes up an error message
         public Error(TextSpan span, string details)
