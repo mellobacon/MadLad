@@ -1,4 +1,5 @@
 ﻿using MadLad.MadLad.Compiler.ErrorReporting;
+using MadLad.MadLad.Compiler.Syntax.Text;
 
 namespace MadLad.MadLad.Compiler.Syntax.Lexer
 {
@@ -90,7 +91,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                     }
                     break;
             }
-            return new SyntaxToken(_text, Kind, Value, Position);
+            return new SyntaxToken(_text, Kind, Value, Start);
         }
         
         #region Operations for lexing
@@ -131,13 +132,19 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
             // if there is a decimal in the number its a float else its an int
             if (Text.Contains('.') && dotcount == 1)
             {
-                float.TryParse(_text, out var value);
-                Value = value;
+                if (!float.TryParse(_text, out var value))
+                {
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), _text, typeof(float));
+                }
+                Value = value;   
             }
             else
             {
-                int.TryParse(_text, out var value);
-                Value = value;
+                if (!int.TryParse(_text, out var value))
+                {
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), _text, typeof(int));
+                }
+                Value = value;   
             }
         }
 
