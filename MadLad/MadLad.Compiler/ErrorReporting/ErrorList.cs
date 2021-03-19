@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using MadLad.MadLad.Compiler.Syntax;
 using MadLad.MadLad.Compiler.Syntax.Text;
@@ -35,6 +36,12 @@ namespace MadLad.MadLad.Compiler.ErrorReporting
             var message = $"Error: Unexpected token <{actual}>, expected <{expected}>.";
             Report(span, message);
             
+        }
+
+        public void ReportInvalidNumber(TextSpan span, string text, Type type)
+        {
+            var message = $"The number {text} is not a valid {type}.";
+            Report(span, message);
         }
     }
 }
