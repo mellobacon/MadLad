@@ -1,6 +1,6 @@
 ﻿namespace MadLad.MadLad.Compiler.Syntax.Text
 {
-    public class TextSpan
+    public readonly struct TextSpan
     {
         public readonly int Start;
         public readonly int Length;
