@@ -34,6 +34,7 @@ namespace MadLad.MadLad
                         var Lexer = new Lexer(input);
                         while (true)
                         {
+                            // TODO lexer may or may not be working right idk
                             var errors = Lexer.Errors;
                             var token = Lexer.Lex();
                             if (token.Kind == SyntaxKind.EOFToken)
@@ -66,6 +67,7 @@ namespace MadLad.MadLad
                     {
                         // blah blah compiler stuff
                         var syntaxtree = SyntaxTree.Parse(input);
+                        // TODO a single error still persists (null ref for some reason)
                         var errors = syntaxtree.Errors;
                         if (showtree)
                         {
