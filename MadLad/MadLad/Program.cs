@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MadLad.MadLad.Compiler.ErrorReporting;
 using MadLad.MadLad.Compiler.Syntax;
 using MadLad.MadLad.Compiler.Syntax.Lexer;
 
@@ -12,12 +14,6 @@ namespace MadLad.MadLad
         static void Main()
         {
             Console.WriteLine("MadLad Compooler but its a REPL instead");
-            Console.WriteLine("Commands:");
-            Console.WriteLine("#DEBUG");
-            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
-            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
-            Console.WriteLine("#clear");
-            Console.WriteLine("#exit");
             while (true)
             {
                 Console.Write(prompt);
@@ -33,28 +29,19 @@ namespace MadLad.MadLad
                 }
                 else
                 {
-                    // blah blah compiler stuff
-                    // TODO Fix error reporting
-                    var syntaxtree = SyntaxTree.Parse(input);
-                    var errors = syntaxtree.Errors;
-                    if (showtree)
-                    {
-                        ShowTree(syntaxtree.Root);   
-                    }
-
-                    // TODO Fix lexer debugging
                     if (showbasiclexer || showfullexer)
                     {
+                        var Lexer = new Lexer(input);
                         while (true)
                         {
-                            var lexer = new Lexer(input);
-                            var token = lexer.Lex();
-                        
+                            var errors = Lexer.Errors;
+                            var token = Lexer.Lex();
                             if (token.Kind == SyntaxKind.EOFToken)
                             {
                                 Console.WriteLine();
                                 break;
                             }
+
                             if (showbasiclexer)
                             {
                                 ShowBasicLexer(token);
@@ -64,35 +51,27 @@ namespace MadLad.MadLad
                             {
                                 ShowFullLexer(token);
                             }
-
-                            break;
+                            if (errors.Any())
+                            {
+                                if (showbasiclexer)
+                                {
+                                    Console.WriteLine();
+                                }
+                                PrintErrors(errors, input);
+                                break;
+                            }
                         }
                     }
-
-                    if (errors.Any())
+                    else
                     {
-                        foreach (var error in errors)
+                        // blah blah compiler stuff
+                        var syntaxtree = SyntaxTree.Parse(input);
+                        var errors = syntaxtree.Errors;
+                        if (showtree)
                         {
-                            var prefix = input.Substring(0, error.Span.Start);
-                            var occurrence = input.Substring(error.Span.Start, error.Span.Length);
-                            var suffix = input.Substring(error.Span.End);
-                            
-                            // Print the message
-                            Console.Write($"{error} at: ");
-                                
-                            // Print what is before the error
-                            Console.WriteLine("   ");
-                            Console.Write(prefix);
-                            
-                            // Print where the error occurs
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.Write(occurrence);
-                            Console.ResetColor();
-                            
-                            // Print what is after the error
-                            Console.Write(suffix);
-                            Console.WriteLine();
+                            ShowTree(syntaxtree.Root);   
                         }
+                        PrintErrors(errors, input);
                     }
                 }
             }
@@ -145,7 +124,13 @@ namespace MadLad.MadLad
             else if (command.Contains($"{command_prompt}showtree") && debug)
             {
                 showtree = !showtree;
+                showbasiclexer = false;
+                showfullexer = false;
                 Console.WriteLine(showtree ? "Syntax Tree Enabled" : "Syntax Tree Disabled");
+            }
+            else if (command.Contains($"{command_prompt}help"))
+            {
+                ShowHelp();
             }
         }
 
@@ -231,6 +216,54 @@ namespace MadLad.MadLad
             foreach (var child in node.GetChildren())
             {
                 ShowTree(child, indent, child == last);
+            }
+        }
+
+        static void ShowHelp()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Commands:");
+            Console.WriteLine("#help");
+            Console.WriteLine("#DEBUG");
+            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
+            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
+            Console.WriteLine("#showtree (DEBUG MODE ONLY)");
+            Console.WriteLine("#clear");
+            Console.WriteLine("#exit");
+            Console.ResetColor();
+        }
+
+        static void PrintErrors(IEnumerable<Error> errors, string input)
+        {
+            foreach (var error in errors)
+            {
+                // Prevent it from trying to highlight an empty token
+                if (error.Details.Contains("EOF"))
+                {
+                    break;
+                }
+                
+                // Print the message
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{error} at: ");
+                Console.ResetColor();
+
+                var prefix = input.Substring(0, error.Span.Start);
+                var occurrence = input.Substring(error.Span.Start, error.Span.Length);
+                var suffix = input.Substring(error.Span.End);
+
+                // Print what is before the error
+                Console.WriteLine("   ");
+                Console.Write(prefix);
+                            
+                // Print where the error occurs
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write(occurrence);
+                Console.ResetColor();
+                            
+                // Print what is after the error
+                Console.Write(suffix);
+                Console.WriteLine();
             }
         }
     }
