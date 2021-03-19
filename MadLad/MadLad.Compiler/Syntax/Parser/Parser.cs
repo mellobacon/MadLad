@@ -50,10 +50,21 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
         
         ExpressionSyntax ParseBinaryExpression(int parentprecedence = 0)
         {
+            ExpressionSyntax left;
             // if there is a unary expression parse that
+            var unaryprecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            if (unaryprecedence != 0 && unaryprecedence >= parentprecedence)
+            {
+                var op = NextToken();
+                var operand = ParseBinaryExpression(unaryprecedence);
+                left = new UnaryExpression(op, operand);
+            }
+            else
+            {
+               left = ParsePrimaryExpression();
+            }
             
             // else actually parse the binary expression
-            var left = ParsePrimaryExpression();
             while (true)
             {
                 var precedence = Current.Kind.GetBinaryOperatorPrecedence();
@@ -77,6 +88,11 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
             // return that value...i think
             switch (Current.Kind)
             {
+                case SyntaxKind.OpenParenToken:
+                    var left = NextToken();
+                    var expression = ParseBinaryExpression();
+                    var right = MatchToken(SyntaxKind.CloseParenToken);
+                    return new GroupedExpression(left, expression, right);
                 default:
                     var numbertoken = MatchToken(SyntaxKind.NumberToken);
                     return new NumberNode(numbertoken);
