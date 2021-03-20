@@ -20,7 +20,9 @@ namespace MadLad.MadLad.Compiler.Syntax
 
         public static SyntaxTree Parse(string text)
         {
+            // lex the input
             var parser = new Parser.Parser(text);
+            // parse the input
             return parser.Parse();
         }
     }

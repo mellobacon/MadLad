@@ -22,7 +22,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         }
 
         /// <summary>
-        /// Returns each syntax token in the input
+        /// Turns each character into a token and returns it
         /// </summary>
         /// <returns></returns>
         public SyntaxToken Lex()
@@ -31,7 +31,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
             Kind = SyntaxKind.BadToken;
             Value = null;
             
-            // sets stuff depending on what char it is
+            // Sets syntax token parameters depending on what char it is
             switch (Current)
             {
                 case '\0':
@@ -111,6 +111,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         private void ReadNumberToken()
         {
             var dotcount = 0;
+            // continues getting the number until there isnt another one to read
             while (char.IsDigit(Current) || Current == '.')
             {
                 if (Current == '.')
