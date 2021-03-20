@@ -35,7 +35,6 @@ namespace MadLad.MadLad.Compiler.ErrorReporting
         {
             var message = $"Error: Unexpected token <{actual}>, expected <{expected}>.";
             Report(span, message);
-            
         }
 
         public void ReportInvalidNumber(TextSpan span, string text, Type type)
