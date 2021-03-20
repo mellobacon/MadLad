@@ -1,5 +1,6 @@
 ﻿namespace MadLad.MadLad.Compiler.Syntax.Text
 {
+    // for finding the length of the text ig
     public readonly struct TextSpan
     {
         public readonly int Start;

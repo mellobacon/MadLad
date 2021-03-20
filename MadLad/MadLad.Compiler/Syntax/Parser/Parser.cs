@@ -32,7 +32,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
                 }
             } while (token.Kind != SyntaxKind.EOFToken);
             Tokens = tokens.ToArray();
-            ErrorList.AddRange(lexer.Errors);
+            ErrorList.AddRange(lexer.Errors); // add any errors while lexing to the error list
         }
         
         // Analyze the tokens

@@ -2,6 +2,7 @@
 
 namespace MadLad.MadLad.Compiler.Syntax.Expressions
 {
+    // Represents a unary expression ie -5 or...!2 or something
     public class UnaryExpression : ExpressionSyntax
     {
         public readonly SyntaxToken OpToken;

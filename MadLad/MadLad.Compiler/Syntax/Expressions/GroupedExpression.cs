@@ -2,6 +2,7 @@
 
 namespace MadLad.MadLad.Compiler.Syntax.Expressions
 {
+    // Represents a grouped expression ie stuff surrounded in parentheses
     public class GroupedExpression : ExpressionSyntax
     {
         public SyntaxToken Openparentoken;

@@ -2,6 +2,7 @@
 
 namespace MadLad.MadLad.Compiler.Syntax.Expressions
 {
+    // Represents a binary expression ie 2 + 2 or like...5 / -7 or something
     public class BinaryExpression : ExpressionSyntax
     {
         readonly ExpressionSyntax Left;
