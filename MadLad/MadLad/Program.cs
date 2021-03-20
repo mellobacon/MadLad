@@ -34,7 +34,6 @@ namespace MadLad.MadLad
                         var Lexer = new Lexer(input);
                         while (true)
                         {
-                            // TODO lexer may or may not be working right idk
                             var errors = Lexer.Errors;
                             var token = Lexer.Lex();
                             if (token.Kind == SyntaxKind.EOFToken)
@@ -91,7 +90,7 @@ namespace MadLad.MadLad
             }
             else if (command.Contains($"{command_prompt}exit"))
             {
-                Console.Write("Exiting...");
+                Console.WriteLine("Exiting...");
                 Environment.Exit(0);
             }
             else if (command.Contains($"{command_prompt}DEBUG"))
@@ -135,7 +134,7 @@ namespace MadLad.MadLad
                 ShowHelp();
             }
         }
-
+        
         static void ShowBasicLexer(SyntaxToken token)
         {
             if (token.Kind != SyntaxKind.WhitespaceToken && token.Value != null)
@@ -228,7 +227,7 @@ namespace MadLad.MadLad
             Console.WriteLine("#help");
             Console.WriteLine("#DEBUG");
             Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
-            Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
+            Console.WriteLine("#showlexer --full (DEBUG MODE ONLY)");
             Console.WriteLine("#showtree (DEBUG MODE ONLY)");
             Console.WriteLine("#clear");
             Console.WriteLine("#exit");
