@@ -20,14 +20,21 @@ namespace MadLad.MadLad.Compiler.Evaluator
 
         private object EvaluateExpression(ExpressionSyntax root)
         {
-            // Evaluate number node
-            if (root is NumberNode n)
+            // Evaluate node
+            if (root is LiteralExpression n)
             {
-                if (n.Token.Text.Contains('.'))
+                // if its a number return the number
+                // else return a bool
+                if (n.Token.Kind == SyntaxKind.NumberToken)
                 {
-                    return (float)n.Token.Value;
+                    if (n.Token.Text.Contains('.'))
+                    {
+                        return (float)n.Token.Value;
+                    }
+                    return (int)n.Token.Value;
                 }
-                return (int)n.Token.Value;
+
+                return (bool)n.Token.Value;
             }
 
             // Evaluate grouped expression
@@ -72,7 +79,8 @@ namespace MadLad.MadLad.Compiler.Evaluator
                     case SyntaxKind.SlashToken:
                         return Convert.ToSingle(left) / Convert.ToSingle(right); //except this one. this stays floaty
                     default:
-                        throw new Exception($"Unexpected binary operator {b.Op}");
+                        //throw new Exception($"Unexpected binary operator {b.Op}");
+                        return null;
                 }
             }
             // Evaluate unary expression
