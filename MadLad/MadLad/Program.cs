@@ -75,6 +75,7 @@ namespace MadLad.MadLad
                             ShowTree(syntaxtree.Root);   
                         }
 
+                        // if there are errors dont evaluate
                         if (!errors.Any())
                         {
                             var evaluator = new Evaluator(syntaxtree.Root);
