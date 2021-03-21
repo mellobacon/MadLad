@@ -24,5 +24,19 @@
                 _ => 0
             };
         }
+        
+        public static string GetText(SyntaxKind kind)
+        {
+            return kind switch
+            {
+                SyntaxKind.PlusToken => "+",
+                SyntaxKind.MinusToken => "-",
+                SyntaxKind.StarToken => "*",
+                SyntaxKind.SlashToken => "/",
+                SyntaxKind.OpenParenToken => "(",
+                SyntaxKind.CloseParenToken => ")",
+                _ => null
+            };
+        }
     }
 }
