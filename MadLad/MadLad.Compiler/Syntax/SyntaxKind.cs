@@ -15,13 +15,19 @@
         SlashToken,
         OpenParenToken,
         CloseParenToken,
+        EqualsToken,
+        EqualsEqualsToken,
+
         VariableToken,
+        TrueKeyword,
+        FalseKeyword,
         
         // Expressions
         LiteralExpression,
         BinaryExpression,
         GroupedExpression,
         UnaryExpression,
+        AssignmentExpression,
 
         // Empty
         BadToken,
