@@ -11,6 +11,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         private SyntaxKind Kind;
         private object Value;
         private char Current => Peek(0); // Sets the current character to whatever
+        private char NextToken => Peek(1); // Sets the next token after the current one to whatever
 
         private readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
@@ -36,29 +37,42 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                 case '\0':
                     Kind = SyntaxKind.EOFToken;
                     break;
+                case '=':
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.EqualsEqualsToken;
+                        Advance(2);
+                        break;
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.EqualsToken;
+                        Advance(1);
+                        break;
+                    }
                 case '+':
                     Kind = SyntaxKind.PlusToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case '-':
                     Kind = SyntaxKind.MinusToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case '*':
                     Kind = SyntaxKind.StarToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case '/':
                     Kind = SyntaxKind.SlashToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case ')':
                     Kind = SyntaxKind.CloseParenToken;
-                    Advance();
+                    Advance(1);
                     break;
                 case '0': case '1': case '2':
                 case '3': case '4': case '5':
@@ -73,18 +87,18 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                     ReadWhiteSpaceToken();
                     break;
                 default:
-                    if (char.IsLetter(Current) || Current == '_')
-                    {
-                        ReadLetterToken();
-                    }
                     if (char.IsWhiteSpace(Current))
                     {
                         ReadWhiteSpaceToken();
                     }
+                    if (char.IsLetter(Current) || Current == '_')
+                    {
+                        ReadLetterToken();
+                    }
                     else
                     {
                         ErrorList.ReportBadCharacter(Position, Current);
-                        Advance();
+                        Advance(1);
                     }
                     break;
             }
@@ -100,9 +114,9 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         
         #region Operations for lexing
 
-        private void Advance()
+        private void Advance(int i)
         {
-            Position++;
+            Position += i;
         }
         
         // returns the char at whatever position depending on the offset
@@ -126,7 +140,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                     }
                     dotcount++;
                 }
-                Advance();
+                Advance(1);
             }
 
             var length = Position - Start;
@@ -156,7 +170,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         {
             while (char.IsWhiteSpace(Current))
             {
-                Advance();
+                Advance(1);
             }
             Kind = SyntaxKind.WhitespaceToken;
         }
@@ -165,12 +179,21 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
         {
             while (char.IsLetter(Current) || Current == '_')
             {
-                Advance();
+                Advance(1);
             }
 
-            Kind = SyntaxKind.VariableToken;
-            //var length = Position - Start;
-            //var text = Text.Substring(Start, length);
+            var length = Position - Start;
+            var text = Text.Substring(Start, length);
+            Kind = SyntaxPrecedences.GetKeywordKind(text);
+            if (Kind == SyntaxKind.FalseKeyword)
+            {
+                Value = false;
+            }
+
+            if (Kind == SyntaxKind.TrueKeyword)
+            {
+                Value = true;
+            }
         }
         #endregion
     }
