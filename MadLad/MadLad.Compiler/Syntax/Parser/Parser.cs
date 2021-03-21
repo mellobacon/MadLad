@@ -39,16 +39,26 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
         public SyntaxTree Parse()
         {
             // parse the expression
-            var primaryexpression = ParseBinaryExpression();
+            var primaryexpression = ParseAssignmentExpression();
             var eoftoken = MatchToken(SyntaxKind.EOFToken);
-            
-            // if something is being assigned to a variable parse that
-            // else parse binary expression
-            
             return new SyntaxTree(ErrorList, primaryexpression, eoftoken);
         }
-        
-        ExpressionSyntax ParseBinaryExpression(int parentprecedence = 0)
+
+        private ExpressionSyntax ParseAssignmentExpression()
+        {
+            // if something is being assigned to a variable parse that
+            // else parse binary expression
+            if (Current.Kind == SyntaxKind.VariableToken && Peek(1).Kind == SyntaxKind.EqualsToken)
+            {
+                var identifierToken = NextToken();
+                var operatorToken = NextToken();
+                var right = ParseAssignmentExpression();
+                return new AssignmentExpression(identifierToken, operatorToken, right);
+            }
+            return ParseBinaryExpression();
+        }
+
+        private ExpressionSyntax ParseBinaryExpression(int parentprecedence = 0)
         {
             ExpressionSyntax left;
             // if there is a unary expression parse that
@@ -63,7 +73,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
             {
                left = ParsePrimaryExpression();
             }
-            
+
             // else actually parse the binary expression
             while (true)
             {
@@ -82,10 +92,10 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
             return left;
         }
 
-        ExpressionSyntax ParsePrimaryExpression()
+        private ExpressionSyntax ParsePrimaryExpression()
         {
-            // check if token is a number and
-            // return that value...i think
+            // check if token is a keyword or number or variable or start of a grouped expression
+            // and return it
             switch (Current.Kind)
             {
                 case SyntaxKind.OpenParenToken:
@@ -93,9 +103,14 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
                     var expression = ParseBinaryExpression();
                     var right = MatchToken(SyntaxKind.CloseParenToken);
                     return new GroupedExpression(left, expression, right);
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    var keywordToken = NextToken();
+                    var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
+                    return new LiteralExpression(keywordToken, value);
                 default:
                     var numbertoken = MatchToken(SyntaxKind.NumberToken);
-                    return new NumberNode(numbertoken);
+                    return new LiteralExpression(numbertoken);
             }
         }
 
