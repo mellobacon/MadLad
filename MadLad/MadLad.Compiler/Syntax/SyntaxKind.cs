@@ -15,6 +15,7 @@
         SlashToken,
         OpenParenToken,
         CloseParenToken,
+        VariableToken,
         
         // Expressions
         LiteralExpression,
