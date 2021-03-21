@@ -5,15 +5,14 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
 {
     public class Lexer
     {
-        readonly string Text;
-        string _text;
-        int Start;
-        int Position;
-        SyntaxKind Kind;
-        object Value;
-        char Current => Peek(0); // Sets the current character to whatever
+        private readonly string Text;
+        private int Start;
+        private int Position;
+        private SyntaxKind Kind;
+        private object Value;
+        private char Current => Peek(0); // Sets the current character to whatever
 
-        readonly ErrorList ErrorList = new();
+        private readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
 
         public Lexer(string text)
@@ -39,32 +38,26 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                     break;
                 case '+':
                     Kind = SyntaxKind.PlusToken;
-                    _text = "+";
                     Advance();
                     break;
                 case '-':
                     Kind = SyntaxKind.MinusToken;
-                    _text = "-";
                     Advance();
                     break;
                 case '*':
                     Kind = SyntaxKind.StarToken;
-                    _text = "*";
                     Advance();
                     break;
                 case '/':
                     Kind = SyntaxKind.SlashToken;
-                    _text = "/";
                     Advance();
                     break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;
-                    _text = "(";
                     Advance();
                     break;
                 case ')':
                     Kind = SyntaxKind.CloseParenToken;
-                    _text = ")";
                     Advance();
                     break;
                 case '0': case '1': case '2':
@@ -79,7 +72,11 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                 case '\r':
                     ReadWhiteSpaceToken();
                     break;
-                default: 
+                default:
+                    if (char.IsLetter(Current) || Current == '_')
+                    {
+                        ReadLetterToken();
+                    }
                     if (char.IsWhiteSpace(Current))
                     {
                         ReadWhiteSpaceToken();
@@ -91,7 +88,14 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                     }
                     break;
             }
-            return new SyntaxToken(_text, Kind, Value, Start);
+
+            var text = SyntaxPrecedences.GetText(Kind);
+            var length = Position - Start;
+            if (text == null)
+            {
+                text = Text.Substring(Start, length);
+            }
+            return new SyntaxToken(text, Kind, Value, Start);
         }
         
         #region Operations for lexing
@@ -127,23 +131,22 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
 
             var length = Position - Start;
             var text = Text.Substring(Start, length);
-            _text = text;
             Kind = SyntaxKind.NumberToken;
 
             // if there is a decimal in the number its a float else its an int
             if (Text.Contains('.') && dotcount == 1)
             {
-                if (!float.TryParse(_text, out var value))
+                if (!float.TryParse(text, out var value))
                 {
-                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), _text, typeof(float));
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, typeof(float));
                 }
                 Value = value;   
             }
             else
             {
-                if (!int.TryParse(_text, out var value))
+                if (!int.TryParse(text, out var value))
                 {
-                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), _text, typeof(int));
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, typeof(int));
                 }
                 Value = value;   
             }
@@ -155,10 +158,20 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
             {
                 Advance();
             }
-            _text = " ";
             Kind = SyntaxKind.WhitespaceToken;
         }
 
+        private void ReadLetterToken()
+        {
+            while (char.IsLetter(Current) || Current == '_')
+            {
+                Advance();
+            }
+
+            Kind = SyntaxKind.VariableToken;
+            //var length = Position - Start;
+            //var text = Text.Substring(Start, length);
+        }
         #endregion
     }
 }
