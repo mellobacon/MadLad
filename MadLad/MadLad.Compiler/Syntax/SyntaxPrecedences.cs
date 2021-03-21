@@ -7,7 +7,7 @@
         {
             return kind switch
             {
-                SyntaxKind.MinusToken => 5,
+                SyntaxKind.MinusToken => 6,
                 _ => 0
             };
         }
@@ -17,11 +17,22 @@
             // return binary operator precedence
             return kind switch
             {
-                SyntaxKind.StarToken => 4,
-                SyntaxKind.SlashToken => 3,
-                SyntaxKind.PlusToken => 2,
-                SyntaxKind.MinusToken => 1,
+                SyntaxKind.StarToken => 5,
+                SyntaxKind.SlashToken => 4,
+                SyntaxKind.PlusToken => 3,
+                SyntaxKind.MinusToken => 2,
+                SyntaxKind.EqualsEqualsToken => 1,
                 _ => 0
+            };
+        }
+
+        public static SyntaxKind GetKeywordKind(string text)
+        {
+            return text switch
+            {
+                "true" => SyntaxKind.TrueKeyword,
+                "false" => SyntaxKind.FalseKeyword,
+                _ => SyntaxKind.VariableToken
             };
         }
         
@@ -35,6 +46,8 @@
                 SyntaxKind.SlashToken => "/",
                 SyntaxKind.OpenParenToken => "(",
                 SyntaxKind.CloseParenToken => ")",
+                SyntaxKind.TrueKeyword => "true",
+                SyntaxKind.FalseKeyword => "false",
                 _ => null
             };
         }
