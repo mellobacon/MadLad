@@ -6,11 +6,11 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
 {
     public class Parser
     {
-        readonly SyntaxToken[] Tokens;
-        readonly ErrorList ErrorList = new();
-        ErrorList Errors => ErrorList;
+        private readonly SyntaxToken[] Tokens;
+        private readonly ErrorList ErrorList = new();
+        private ErrorList Errors => ErrorList;
 
-        int Position;
+        private int Position;
         private SyntaxToken Current => Peek(0);
         
         // Add each token in the input to a list of tokens

@@ -6,7 +6,7 @@ namespace MadLad.MadLad.Compiler.Syntax
     // Represents a number
     public class NumberNode : ExpressionSyntax
     {
-        SyntaxToken Token { get; }
+        public SyntaxToken Token { get; }
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
         public override IEnumerable<SyntaxNode> GetChildren()
         {
