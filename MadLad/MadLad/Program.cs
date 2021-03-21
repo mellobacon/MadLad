@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MadLad.MadLad.Compiler.ErrorReporting;
+using MadLad.MadLad.Compiler.Evaluator;
 using MadLad.MadLad.Compiler.Syntax;
 using MadLad.MadLad.Compiler.Syntax.Lexer;
 
@@ -9,9 +10,10 @@ namespace MadLad.MadLad
 {
     internal static class Program
     {
-        static string prompt = "> ";
-        const string command_prompt = "#";
-        static void Main()
+        private static string prompt = "> ";
+        private const string command_prompt = "#";
+
+        private static void Main()
         {
             Console.WriteLine("MadLad Compooler but its a REPL instead");
             while (true)
@@ -66,12 +68,20 @@ namespace MadLad.MadLad
                     {
                         // blah blah compiler stuff
                         var syntaxtree = SyntaxTree.Parse(input);
+                        var evaluator = new Evaluator(syntaxtree.Root);
+                        var result = evaluator.Evaluate();
+                        
                         // TODO a single error still persists (null ref for some reason)
                         var errors = syntaxtree.Errors;
                         if (showtree)
                         {
                             ShowTree(syntaxtree.Root);   
                         }
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(result);
+                        Console.ResetColor();
+                        
                         PrintErrors(errors, input);
                     }
                 }
@@ -135,7 +145,7 @@ namespace MadLad.MadLad
             }
         }
         
-        static void ShowBasicLexer(SyntaxToken token)
+        private static void ShowBasicLexer(SyntaxToken token)
         {
             if (token.Kind != SyntaxKind.WhitespaceToken && token.Value != null)
             {
@@ -147,7 +157,7 @@ namespace MadLad.MadLad
             }
         }
 
-        static void ShowFullLexer(SyntaxToken token)
+        private static void ShowFullLexer(SyntaxToken token)
         {
             object value;
             if (token.Value == null)
@@ -238,17 +248,28 @@ namespace MadLad.MadLad
         {
             foreach (var error in errors)
             {
-                // Prevent it from trying to highlight an empty token
-                if (error.Details.Contains("EOF"))
-                {
-                    break;
-                }
                 
                 // Print the message
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write($"{error} at: ");
                 Console.ResetColor();
-
+                
+                // Prevent it from trying to highlight an empty token
+                if (error.Details.Contains("EOF"))
+                {
+                    Console.WriteLine();
+                    // Print arrow
+                    Console.WriteLine(input);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    for (int _ = 0; _ < input.Substring(0, error.Span.Start).Length; _++)
+                    {
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine("^");
+                    Console.ResetColor();
+                    break;
+                }
+                
                 var prefix = input.Substring(0, error.Span.Start);
                 var occurrence = input.Substring(error.Span.Start, error.Span.Length);
                 var suffix = input.Substring(error.Span.End);
@@ -265,6 +286,15 @@ namespace MadLad.MadLad
                 // Print what is after the error
                 Console.Write(suffix);
                 Console.WriteLine();
+                
+                // Print arrow
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                for (int _ = 0; _ < prefix.Length; _++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine("^");
+                Console.ResetColor();
             }
         }
     }
