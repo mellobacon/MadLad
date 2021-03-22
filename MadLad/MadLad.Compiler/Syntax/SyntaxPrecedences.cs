@@ -7,7 +7,8 @@
         {
             return kind switch
             {
-                SyntaxKind.MinusToken => 6,
+                SyntaxKind.BangToken => 4,
+                SyntaxKind.MinusToken => 4,
                 _ => 0
             };
         }
@@ -17,11 +18,12 @@
             // return binary operator precedence
             return kind switch
             {
-                SyntaxKind.StarToken => 5,
-                SyntaxKind.SlashToken => 4,
-                SyntaxKind.PlusToken => 3,
+                SyntaxKind.StarToken => 3,
+                SyntaxKind.SlashToken => 3,
+                SyntaxKind.PlusToken => 2,
                 SyntaxKind.MinusToken => 2,
                 SyntaxKind.EqualsEqualsToken => 1,
+                SyntaxKind.NotEqualsToken => 1,
                 _ => 0
             };
         }
