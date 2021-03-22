@@ -50,6 +50,19 @@ namespace MadLad.MadLad.Compiler.Syntax.Lexer
                         Advance(1);
                         break;
                     }
+                case '!':
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.NotEqualsToken;
+                        Advance(2);
+                        break;
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.BangToken;
+                        Advance(1);
+                        break;
+                    }
                 case '+':
                     Kind = SyntaxKind.PlusToken;
                     Advance(1);

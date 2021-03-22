@@ -17,6 +17,8 @@
         CloseParenToken,
         EqualsToken,
         EqualsEqualsToken,
+        BangToken,
+        NotEqualsToken,
 
         VariableToken,
         TrueKeyword,
