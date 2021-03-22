@@ -96,6 +96,11 @@ namespace MadLad.MadLad.Compiler.Evaluator
                     }
                     return -(int)operand;
                 }
+
+                if (op.Kind == SyntaxKind.BangToken)
+                {
+                    return !(bool)operand;
+                }
                 throw new Exception($"Unexpected unnary operator {op}");
             }
             throw new Exception($"Unexpected node {root.Kind}");
