@@ -5,7 +5,7 @@ namespace MadLad.MadLad.Compiler.Syntax.Expressions
     // Represents a number
     public class LiteralExpression : ExpressionSyntax
     {
-        private readonly object Value;
+        public readonly object Value;
         public readonly SyntaxToken Token;
         
         public LiteralExpression(SyntaxToken token) : this(token, token.Value) {}
