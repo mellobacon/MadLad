@@ -15,8 +15,7 @@ namespace MadLad.MadLad.Compiler.Binding
 
         private BinaryBoundOperator(SyntaxKind syntaxKind, BinaryBoundOperatorKind kind, Type operandType, Type resultType) 
             : this(syntaxKind, kind, operandType, operandType, resultType) { }
-        
-        public BinaryBoundOperator(SyntaxKind syntaxkind, BinaryBoundOperatorKind boundkind, Type lefttype, Type righttype, Type resulttype)
+        private BinaryBoundOperator(SyntaxKind syntaxkind, BinaryBoundOperatorKind boundkind, Type lefttype, Type righttype, Type resulttype)
         {
             SyntaxKind = syntaxkind;
             BoundKind = boundkind;
