@@ -9,7 +9,7 @@ namespace MadLad.MadLad.Compiler.ErrorReporting
     // a list of errors to call when theres an error
     public class ErrorList : IEnumerable<Error>
     {
-        readonly List<Error> Errors = new();
+        private readonly List<Error> Errors = new();
         
         public IEnumerator<Error> GetEnumerator() => Errors.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -40,6 +40,18 @@ namespace MadLad.MadLad.Compiler.ErrorReporting
         public void ReportInvalidNumber(TextSpan span, string text, Type type)
         {
             var message = $"The number {text} is not a valid {type}.";
+            Report(span, message);
+        }
+
+        public void ReportUndefinedBinaryOperator(TextSpan span, string op, Type left, Type right)
+        {
+            var message = $"Binary operator '{op}' is not defined for the types {left} and {right}.";
+            Report(span, message);
+        }
+
+        public void ReportUndefinedUnaryOperator(TextSpan span, string op, Type operand)
+        {
+            var message = $"Unary operator '{op}' is not defined for the type {operand}.";
             Report(span, message);
         }
     }
