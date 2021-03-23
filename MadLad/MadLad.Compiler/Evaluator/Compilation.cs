@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MadLad.MadLad.Compiler.Binding;
 using MadLad.MadLad.Compiler.ErrorReporting;
@@ -15,17 +16,17 @@ namespace MadLad.MadLad.Compiler.Evaluator
             SyntaxTree = syntaxtree;
         }
 
-        public EvaluationResult Evaluate()
+        public EvaluationResult Evaluate(Dictionary<Variable, object> variables)
         {
             // Get the expression
-            var binder = new Binder();
+            var binder = new Binder(variables);
             var expression = binder.BindExpression(SyntaxTree.Root);
             
             // Get the errors from the syntax tree and from binding
             var Errors = SyntaxTree.Errors.Concat(binder.Errors);
             
             // Evaluate the expression
-            var evaluator = new Evaluator(expression);
+            var evaluator = new Evaluator(expression, variables);
             var value = evaluator.Evaluate();
 
             if (Errors.Any())

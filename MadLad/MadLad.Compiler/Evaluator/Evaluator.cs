@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using MadLad.MadLad.Compiler.Binding;
 using MadLad.MadLad.Compiler.Binding.Expressions;
+using MadLad.MadLad.Compiler.Syntax;
 
 namespace MadLad.MadLad.Compiler.Evaluator
 {
@@ -8,9 +10,11 @@ namespace MadLad.MadLad.Compiler.Evaluator
     public class Evaluator
     {
         private readonly BoundExpression Root;
-        public Evaluator(BoundExpression root)
+        public readonly Dictionary<Variable, object> Variables;
+        public Evaluator(BoundExpression root, Dictionary<Variable, object> variables)
         {
             Root = root;
+            Variables = variables;
         }
 
         public object Evaluate()
@@ -41,6 +45,8 @@ namespace MadLad.MadLad.Compiler.Evaluator
                         BinaryBoundOperatorKind.Subtraction => Convert.ToSingle(left) - Convert.ToSingle(right),
                         BinaryBoundOperatorKind.Multiplication => Convert.ToSingle(left) * Convert.ToSingle(right),
                         BinaryBoundOperatorKind.Division => Convert.ToSingle(left) / Convert.ToSingle(right),
+                        BinaryBoundOperatorKind.Equals => Equals(left, right),
+                        BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
                         _ => throw new Exception($"Unexpected binary operator {b.Op}")
                     };
                 }
@@ -53,6 +59,8 @@ namespace MadLad.MadLad.Compiler.Evaluator
                     BinaryBoundOperatorKind.Division =>
                         Convert.ToSingle(left) / Convert.ToSingle(right) //except this one. this stays floaty
                     ,
+                    BinaryBoundOperatorKind.Equals => Equals(left, right),
+                    BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
                     _ => throw new Exception($"Unexpected binary operator {b.Op}")
                 };
             }
@@ -73,6 +81,20 @@ namespace MadLad.MadLad.Compiler.Evaluator
                 }
                 throw new Exception($"Unexpected unnary operator {u.Op}");
             }
+
+            if (root is AssignmentBoundExpression a)
+            {
+                var value = EvaluateExpression(a.Expression);
+                Variables[a.Variable] = value;
+                return value;
+            }
+
+            if (root is VariableBoundExpression v)
+            {
+                var value = Variables[v.Variable];
+                return value;
+            }
+            
             throw new Exception($"Unexpected node {root.Kind}");
         }
     }
