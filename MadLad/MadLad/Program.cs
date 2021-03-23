@@ -15,6 +15,8 @@ namespace MadLad.MadLad
 
         private static void Main()
         {
+            var variables = new Dictionary<Variable, object>();
+            
             Console.WriteLine("MadLad Compooler but its a REPL instead");
             while (true)
             {
@@ -76,7 +78,7 @@ namespace MadLad.MadLad
 
                         // if there are errors dont evaluate
                         var compilation = new Compilation(syntaxtree);
-                        var result = compilation.Evaluate();
+                        var result = compilation.Evaluate(variables);
                         var errors = result.Errors;
 
                         if (!errors.Any())
