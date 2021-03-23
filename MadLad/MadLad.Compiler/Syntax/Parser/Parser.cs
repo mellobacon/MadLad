@@ -108,6 +108,9 @@ namespace MadLad.MadLad.Compiler.Syntax.Parser
                     var keywordToken = NextToken();
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpression(keywordToken, value);
+                case SyntaxKind.VariableToken:
+                    var variable = NextToken();
+                    return new NameExpression(variable);
                 default:
                     var numbertoken = MatchToken(SyntaxKind.NumberToken);
                     return new LiteralExpression(numbertoken);
