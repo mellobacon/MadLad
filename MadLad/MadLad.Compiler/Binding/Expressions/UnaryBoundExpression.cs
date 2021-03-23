@@ -4,8 +4,8 @@ namespace MadLad.MadLad.Compiler.Binding.Expressions
 {
     public class UnaryBoundExpression : BoundExpression
     {
-        private readonly UnaryBoundOperator Op;
-        private readonly BoundExpression Operand;
+        public readonly UnaryBoundOperator Op;
+        public readonly BoundExpression Operand;
 
         public UnaryBoundExpression(UnaryBoundOperator op, BoundExpression operand)
         {

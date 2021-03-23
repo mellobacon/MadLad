@@ -6,7 +6,7 @@ namespace MadLad.MadLad.Compiler.Binding
     public class BinaryBoundOperator
     {
         private readonly SyntaxKind SyntaxKind;
-        private readonly BinaryBoundOperatorKind BoundKind;
+        public readonly BinaryBoundOperatorKind BoundKind;
         private readonly Type LeftType;
         private readonly Type RightType;
         public readonly Type ResultType;
