@@ -6,13 +6,13 @@ namespace MadLad.MadLad.Compiler.Binding
     public class UnaryBoundOperator
     {
         private readonly SyntaxKind SyntaxKind;
-        private readonly UnaryBoundOperatorKind Kind;
-        private static Type OperandType;
+        public readonly UnaryBoundOperatorKind Kind;
+        private readonly Type OperandType;
         public readonly Type ResultType;
 
-        UnaryBoundOperator(SyntaxKind syntaxKind, UnaryBoundOperatorKind kind, Type operandType) : this(syntaxKind, kind, operandType, operandType) { }
-        
-        public UnaryBoundOperator(SyntaxKind syntaxkind, UnaryBoundOperatorKind kind, Type operandtype, Type resulttype)
+        private UnaryBoundOperator(SyntaxKind syntaxKind, UnaryBoundOperatorKind kind, Type operandType) : this(syntaxKind, kind, operandType, operandType) { }
+
+        private UnaryBoundOperator(SyntaxKind syntaxkind, UnaryBoundOperatorKind kind, Type operandtype, Type resulttype)
         {
             SyntaxKind = syntaxkind;
             Kind = kind;
@@ -22,15 +22,15 @@ namespace MadLad.MadLad.Compiler.Binding
 
         private static readonly UnaryBoundOperator[] operations =
         {
-            new(SyntaxKind.MinusToken, UnaryBoundOperatorKind.Negation, typeof(bool)),
-            new(SyntaxKind.BangToken, UnaryBoundOperatorKind.LogicalNegation, typeof(int)),
+            new(SyntaxKind.MinusToken, UnaryBoundOperatorKind.Negation, typeof(int)),
+            new(SyntaxKind.BangToken, UnaryBoundOperatorKind.LogicalNegation, typeof(bool)),
         };
 
         public static UnaryBoundOperator Bind(SyntaxKind kind, Type operandtype)
         {
             foreach (var op in operations)
             {
-                if (op.SyntaxKind == kind && operandtype == OperandType)
+                if (op.SyntaxKind == kind && op.OperandType == operandtype)
                 {
                     return op;
                 }
