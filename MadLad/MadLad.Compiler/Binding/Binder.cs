@@ -1,5 +1,6 @@
 ﻿using System;
 using MadLad.MadLad.Compiler.Binding.Expressions;
+using MadLad.MadLad.Compiler.ErrorReporting;
 using MadLad.MadLad.Compiler.Syntax;
 using MadLad.MadLad.Compiler.Syntax.Expressions;
 
@@ -7,19 +8,18 @@ namespace MadLad.MadLad.Compiler.Binding
 {
     public class Binder
     {
+        private readonly ErrorList ErrorList = new();
+        public ErrorList Errors => ErrorList;
+        
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
-            switch (syntax.Kind)
+            return syntax.Kind switch
             {
-                case SyntaxKind.LiteralExpression:
-                    return BindLiteralExpression((LiteralExpression)syntax);
-                case SyntaxKind.BinaryExpression:
-                    return BindBinaryExpression((BinaryExpression)syntax);
-                case SyntaxKind.UnaryExpression:
-                    return BindUnaryExpression((UnaryExpression)syntax);
-                default:
-                    throw new Exception($"Unexpected syntax {syntax.Kind}");
-            }
+                SyntaxKind.LiteralExpression => BindLiteralExpression((LiteralExpression) syntax),
+                SyntaxKind.BinaryExpression => BindBinaryExpression((BinaryExpression) syntax),
+                SyntaxKind.UnaryExpression => BindUnaryExpression((UnaryExpression) syntax),
+                _ => throw new Exception($"Unexpected syntax {syntax.Kind}")
+            };
         }
 
         private static BoundExpression BindLiteralExpression(LiteralExpression syntax)
@@ -35,7 +35,8 @@ namespace MadLad.MadLad.Compiler.Binding
             var boundoperator = BinaryBoundOperator.Bind(boundleft.Type, syntax.Op.Kind, boundright.Type);
             if (boundoperator == null)
             {
-                // return error
+                ErrorList.ReportUndefinedBinaryOperator(syntax.Op.Span, syntax.Op.Text, boundleft.Type, boundright.Type);
+                return boundleft;
             }
             return new BinaryBoundExpression(boundleft, boundoperator, boundright);
         }
@@ -43,10 +44,11 @@ namespace MadLad.MadLad.Compiler.Binding
         private BoundExpression BindUnaryExpression(UnaryExpression syntax)
         {
             var boundoperand = BindExpression(syntax.Operand);
-            var boundoperator = UnaryBoundOperator.Bind(syntax.Operand.Kind, boundoperand.Type);
+            var boundoperator = UnaryBoundOperator.Bind(syntax.OpToken.Kind, boundoperand.Type);
             if (boundoperator == null)
             {
-                // return error
+                ErrorList.ReportUndefinedUnaryOperator(syntax.OpToken.Span, syntax.OpToken.Text, boundoperand.Type);
+                return boundoperand;
             }
             return new UnaryBoundExpression(boundoperator, boundoperand);
         }
