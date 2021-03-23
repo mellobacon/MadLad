@@ -28,7 +28,7 @@ namespace MadLad.MadLad.Compiler.Binding
         {
             new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, typeof(int)),
             new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, typeof(float)),
-            
+
             new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, typeof(int)),
             new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, typeof(float)),
             
@@ -38,7 +38,14 @@ namespace MadLad.MadLad.Compiler.Binding
             new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, typeof(float)),
             
             new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(bool)),
-            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(bool))
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int)),
+            
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float)),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(bool)),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int), typeof(bool)),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float), typeof(bool)),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(int), typeof(bool)),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(float), typeof(bool))
         };
 
         public static BinaryBoundOperator Bind(Type leftType, SyntaxKind kind, Type rightType)
