@@ -1,14 +1,14 @@
 ﻿using System;
-using MadLad.MadLad.Compiler.Syntax;
-using MadLad.MadLad.Compiler.Syntax.Expressions;
+using MadLad.MadLad.Compiler.Binding;
+using MadLad.MadLad.Compiler.Binding.Expressions;
 
 namespace MadLad.MadLad.Compiler.Evaluator
 {
     // Evaluates the expressions
     public class Evaluator
     {
-        private readonly ExpressionSyntax Root;
-        public Evaluator(ExpressionSyntax root)
+        private readonly BoundExpression Root;
+        public Evaluator(BoundExpression root)
         {
             Root = root;
         }
@@ -18,90 +18,60 @@ namespace MadLad.MadLad.Compiler.Evaluator
             return EvaluateExpression(Root);
         }
 
-        private object EvaluateExpression(ExpressionSyntax root)
+        private object EvaluateExpression(BoundExpression root)
         {
             // Evaluate node
-            if (root is LiteralExpression n)
+            if (root is LiteralBoundExpression n)
             {
-                // if its a number return the number
-                // else return a bool
-                if (n.Token.Kind == SyntaxKind.NumberToken)
-                {
-                    if (n.Token.Text.Contains('.'))
-                    {
-                        return (float)n.Token.Value;
-                    }
-                    return (int)n.Token.Value;
-                }
-
-                return (bool)n.Token.Value;
+                return n.Value;
             }
 
-            // Evaluate grouped expression
-            if (root is GroupedExpression g)
-            {
-                var expression = EvaluateExpression(g.Expression);
-                return expression;
-            }
-            
             // Evaluate binary expression
-            if (root is BinaryExpression b)
+            if (root is BinaryBoundExpression b)
             {
                 var left = EvaluateExpression(b.Left);
                 var right = EvaluateExpression(b.Right);
-                var op = b.Op;
+                
                 // if one of the numbers is an float convert both numbers to floats
                 if (left is float || right is float)
                 {
-                    switch (op.Kind)
+                    return b.Op.BoundKind switch
                     {
-                        case SyntaxKind.PlusToken:
-                            return Convert.ToSingle(left) + Convert.ToSingle(right);
-                        case SyntaxKind.MinusToken:
-                            return Convert.ToSingle(left) - Convert.ToSingle(right);
-                        case SyntaxKind.StarToken:
-                            return Convert.ToSingle(left) * Convert.ToSingle(right);
-                        case SyntaxKind.SlashToken:
-                            return Convert.ToSingle(left) / Convert.ToSingle(right);
-                        default:
-                            throw new Exception($"Unexpected binary operator {b.Op}");
-                    }
-                }
-                // if one of the numbers is an int convert both numbers to ints
-                switch (op.Kind)
-                {
-                    case SyntaxKind.PlusToken:
-                        return (int)left + (int)right;
-                    case SyntaxKind.MinusToken:
-                        return (int)left - (int)right;
-                    case SyntaxKind.StarToken:
-                        return (int)left * (int)right;
-                    case SyntaxKind.SlashToken:
-                        return Convert.ToSingle(left) / Convert.ToSingle(right); //except this one. this stays floaty
-                    default:
-                        //throw new Exception($"Unexpected binary operator {b.Op}");
-                        return null;
-                }
-            }
-            // Evaluate unary expression
-            if (root is UnaryExpression u)
-            {
-                var op = u.OpToken;
-                var operand = EvaluateExpression(u.Operand);
-                if (op.Kind == SyntaxKind.MinusToken)
-                {
-                    if (operand is float)
-                    {
-                        return -(float)operand;
-                    }
-                    return -(int)operand;
+                        BinaryBoundOperatorKind.Addition => Convert.ToSingle(left) + Convert.ToSingle(right),
+                        BinaryBoundOperatorKind.Subtraction => Convert.ToSingle(left) - Convert.ToSingle(right),
+                        BinaryBoundOperatorKind.Multiplication => Convert.ToSingle(left) * Convert.ToSingle(right),
+                        BinaryBoundOperatorKind.Division => Convert.ToSingle(left) / Convert.ToSingle(right),
+                        _ => throw new Exception($"Unexpected binary operator {b.Op}")
+                    };
                 }
 
-                if (op.Kind == SyntaxKind.BangToken)
+                return b.Op.BoundKind switch
                 {
-                    return !(bool)operand;
+                    BinaryBoundOperatorKind.Addition => (int) left + (int) right,
+                    BinaryBoundOperatorKind.Subtraction => (int) left - (int) right,
+                    BinaryBoundOperatorKind.Multiplication => (int) left * (int) right,
+                    BinaryBoundOperatorKind.Division =>
+                        Convert.ToSingle(left) / Convert.ToSingle(right) //except this one. this stays floaty
+                    ,
+                    _ => throw new Exception($"Unexpected binary operator {b.Op}")
+                };
+            }
+            // Evaluate unary expression
+            if (root is UnaryBoundExpression u)
+            {
+                var operand = EvaluateExpression(u.Operand);
+                switch (u.Op.Kind)
+                {
+                    case UnaryBoundOperatorKind.Negation:
+                        if (operand is float)
+                        {
+                            return -(float)operand;
+                        }
+                        return -(int)operand;
+                    case UnaryBoundOperatorKind.LogicalNegation:
+                        return !(bool)operand;
                 }
-                throw new Exception($"Unexpected unnary operator {op}");
+                throw new Exception($"Unexpected unnary operator {u.Op}");
             }
             throw new Exception($"Unexpected node {root.Kind}");
         }
