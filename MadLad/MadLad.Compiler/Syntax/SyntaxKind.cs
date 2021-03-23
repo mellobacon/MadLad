@@ -30,6 +30,7 @@
         GroupedExpression,
         UnaryExpression,
         AssignmentExpression,
+        NameExpression,
 
         // Empty
         BadToken,
