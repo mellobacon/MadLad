@@ -69,23 +69,22 @@ namespace MadLad.MadLad
                         // blah blah compiler stuff
                         var syntaxtree = SyntaxTree.Parse(input);
                         
-                        var errors = syntaxtree.Errors;
                         if (showtree)
                         {
                             ShowTree(syntaxtree.Root);   
                         }
 
                         // if there are errors dont evaluate
+                        var compilation = new Compilation(syntaxtree);
+                        var result = compilation.Evaluate();
+                        var errors = result.Errors;
+
                         if (!errors.Any())
                         {
-                            var evaluator = new Evaluator(syntaxtree.Root);
-                            var result = evaluator.Evaluate();
-                            
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(result);
+                            Console.WriteLine(result.Value);
                             Console.ResetColor();
                         }
-
                         PrintErrors(errors, input);
                     }
                 }
