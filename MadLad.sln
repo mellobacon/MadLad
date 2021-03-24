@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLad", "MadLad\MadLad.csproj", "{5782487B-BB4D-4042-A206-4F727CF901E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLad.Tests", "MadLad.Tests\MadLad.Tests.csproj", "{4266832F-139F-4A06-970B-C7FED18D3E23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadLad.Compiler", "MadLad.Compiler\MadLad.Compiler.csproj", "{C0FF28C8-4720-45A4-B790-0B7F1749EC6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{5782487B-BB4D-4042-A206-4F727CF901E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5782487B-BB4D-4042-A206-4F727CF901E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5782487B-BB4D-4042-A206-4F727CF901E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4266832F-139F-4A06-970B-C7FED18D3E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4266832F-139F-4A06-970B-C7FED18D3E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4266832F-139F-4A06-970B-C7FED18D3E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4266832F-139F-4A06-970B-C7FED18D3E23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0FF28C8-4720-45A4-B790-0B7F1749EC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0FF28C8-4720-45A4-B790-0B7F1749EC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0FF28C8-4720-45A4-B790-0B7F1749EC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0FF28C8-4720-45A4-B790-0B7F1749EC6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
