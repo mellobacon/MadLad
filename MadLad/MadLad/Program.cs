@@ -205,8 +205,20 @@ namespace MadLad.MadLad
                     Console.Write(node.Kind);
                     Console.ResetColor();
                     break;
+                case SyntaxKind.AssignmentExpression:
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
+                case SyntaxKind.NameExpression:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(node.Kind);
+                    Console.ResetColor();
+                    break;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
+                case SyntaxKind.StarToken:
+                case SyntaxKind.SlashToken:
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.Write(node.Kind);
                     Console.ResetColor();
