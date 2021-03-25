@@ -317,7 +317,11 @@ namespace MadLad
                 {
                     Console.Write(" ");
                 }
-                Console.WriteLine("^");
+                for (int _ = 0; _ < occurrence.Length; _++)
+                {
+                    Console.Write("^");
+                }
+                Console.WriteLine();
                 Console.ResetColor();
             }
         }
