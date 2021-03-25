@@ -6,7 +6,9 @@
         Subtraction,
         Division,
         Multiplication,
+        LogicalAnd,
+        LogicalOr,
         Equals,
-        NotEquals
+        NotEquals,
     }
 }
