@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
+using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
 {
     public class Parser
     {
+        private readonly SourceText Text;
         private readonly SyntaxToken[] Tokens;
         private readonly ErrorList ErrorList = new();
         private ErrorList Errors => ErrorList;
@@ -14,8 +16,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         private SyntaxToken Current => Peek(0);
         
         // Add each token in the input to a list of tokens
-        public Parser(string text)
+        public Parser(SourceText text)
         {
+            Text = text;
             var lexer = new Lexer.Lexer(text);
             var tokens = new List<SyntaxToken>();
             SyntaxToken token;
@@ -41,7 +44,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             // parse the expression
             var primaryexpression = ParseAssignmentExpression();
             var eoftoken = MatchToken(SyntaxKind.EOFToken);
-            return new SyntaxTree(ErrorList, primaryexpression, eoftoken);
+            return new SyntaxTree(Text, ErrorList, primaryexpression, eoftoken);
         }
 
         private ExpressionSyntax ParseAssignmentExpression()
