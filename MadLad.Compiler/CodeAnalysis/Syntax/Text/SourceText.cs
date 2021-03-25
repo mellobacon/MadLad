@@ -6,7 +6,8 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
     {
         private readonly string Text;
         public ImmutableArray<TextLine> Lines;
-        public SourceText(string text)
+        
+        private SourceText(string text)
         {
             Text = text;
             Lines = ParseLines(this, text);
@@ -43,7 +44,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
         private static int GetLineBreakWidth(string text, int i)
         {
             var character = text[i];
-            var length = i + 1 > text.Length ? '\0' : text[i + 1];
+            var length = i + 1 >= text.Length ? '\0' : text[i + 1];
             if (character == '\r' && length == '\n')
             {
                 return 2;
@@ -67,16 +68,17 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
         public int GetLineIndex(int position)
         {
             int lower = 0;
-            int upper = Text.Length - 1;
+            int upper = Lines.Length - 1;
             while (lower <= upper)
             {
-                var index = (lower + upper) / 2;
+                var index = lower + (upper - lower) / 2;
                 var start = Lines[index].Start;
                 if (position == start)
                 {
-                    return ++position;
+                    return index;
                 }
-                else if (start < position)
+
+                if (start > position)
                 {
                     upper = index - 1;
                 }
@@ -85,14 +87,19 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
                     lower = index + 1;
                 }
             }
-
             return lower - 1;
         }
 
         public static SourceText From(string text)
         {
-            return new SourceText(text);
+            return new(text);
         }
+
+        public char this[int index] => Text[index];
+
+        public int Length => Text.Length;
+
+        public bool Contains(char i) => Text.Contains(i); 
 
         public override string ToString() => Text;
         public string ToString(int start, int length) => Text.Substring(start, length);
