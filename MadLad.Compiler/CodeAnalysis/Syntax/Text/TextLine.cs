@@ -7,8 +7,8 @@
         private readonly int Length;
         private readonly int LengthWithBreak;
         private int End => Start + Length;
-        public TextSpan Span => new TextSpan(Start, Length);
-        public TextSpan SpanWithBreak => new TextSpan(Start, LengthWithBreak);
+        private TextSpan Span => new(Start, Length);
+        public TextSpan SpanWithBreak => new(Start, LengthWithBreak);
 
         public TextLine(SourceText text, int start, int length, int lengthwithbreak)
         {
@@ -19,7 +19,7 @@
         }
         
         public override string ToString() => Text.ToString(Start, LengthWithBreak);
-        public string ToString(int start, int length) => Text.ToString(Span);
+        private string ToString(int start, int length) => Text.ToString(Span);
         public string ToString(TextSpan span) => ToString(span.Start, span.Length);
     }
 }

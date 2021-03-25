@@ -96,9 +96,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
         }
 
         public char this[int index] => Text[index];
-
         public int Length => Text.Length;
-
         public bool Contains(char i) => Text.Contains(i); 
 
         public override string ToString() => Text;
