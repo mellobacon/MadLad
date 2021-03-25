@@ -19,6 +19,9 @@
         EqualsEqualsToken,
         BangToken,
         NotEqualsToken,
+        OrPipeToken,
+        HatToken,
+        AndAmpersandToken,
 
         VariableToken,
         TrueKeyword,
