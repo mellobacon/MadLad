@@ -5,7 +5,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
 {
     public class Lexer
     {
-        private readonly string Text;
+        private readonly SourceText Text;
         private int Start;
         private int Position;
         private SyntaxKind Kind;
@@ -16,7 +16,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
         private readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
 
-        public Lexer(string text)
+        public Lexer(SourceText text)
         {
             Text = text;
         }
@@ -120,7 +120,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             var length = Position - Start;
             if (text == null)
             {
-                text = Text.Substring(Start, length);
+                text = Text.ToString(Start, length);
             }
             return new SyntaxToken(text, Kind, Value, Start);
         }
@@ -157,7 +157,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             }
 
             var length = Position - Start;
-            var text = Text.Substring(Start, length);
+            var text = Text.ToString(Start, length);
             Kind = SyntaxKind.NumberToken;
 
             // if there is a decimal in the number its a float else its an int
@@ -196,7 +196,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             }
 
             var length = Position - Start;
-            var text = Text.Substring(Start, length);
+            var text = Text.ToString(Start, length);
             Kind = SyntaxPrecedences.GetKeywordKind(text);
             if (Kind == SyntaxKind.FalseKeyword)
             {
