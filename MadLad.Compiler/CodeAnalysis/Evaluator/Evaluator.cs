@@ -61,6 +61,8 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     ,
                     BinaryBoundOperatorKind.Equals => Equals(left, right),
                     BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
+                    BinaryBoundOperatorKind.LogicalAnd => (bool)left && (bool)right,
+                    BinaryBoundOperatorKind.LogicalOr => (bool)left || (bool)right,
                     _ => throw new Exception($"Unexpected binary operator {b.Op}")
                 };
             }
