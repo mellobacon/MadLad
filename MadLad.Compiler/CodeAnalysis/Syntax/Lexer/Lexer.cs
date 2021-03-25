@@ -79,6 +79,24 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     Kind = SyntaxKind.SlashToken;
                     Advance(1);
                     break;
+                case '&':
+                    if (NextToken == '&')
+                    {
+                        Kind = SyntaxKind.AndAmpersandToken;
+                        Advance(2);
+                        break;
+                    }
+                    Advance(1);
+                    break;
+                case '|':
+                    if (NextToken == '|')
+                    {
+                        Kind = SyntaxKind.OrPipeToken;
+                        Advance(2);
+                        break;
+                    }
+                    Advance(1);
+                    break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;
                     Advance(1);
