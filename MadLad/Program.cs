@@ -5,6 +5,7 @@ using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Evaluator;
 using MadLad.Compiler.CodeAnalysis.Syntax;
 using MadLad.Compiler.CodeAnalysis.Syntax.Lexer;
+using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad
 {
@@ -35,7 +36,7 @@ namespace MadLad
                 {
                     if (showbasiclexer || showfullexer)
                     {
-                        var Lexer = new Lexer(input);
+                        var Lexer = new Lexer(SourceText.From(input));
                         while (true)
                         {
                             var errors = Lexer.Errors;
@@ -61,7 +62,6 @@ namespace MadLad
                                 {
                                     Console.WriteLine();
                                 }
-                                PrintErrors(errors, input);
                                 break;
                             }
                         }
@@ -87,7 +87,10 @@ namespace MadLad
                             Console.WriteLine(result.Value);
                             Console.ResetColor();
                         }
-                        PrintErrors(errors, input);
+
+                        var sourcetext = syntaxtree.Text;
+                        
+                        PrintErrors(errors, sourcetext, input);
                     }
                 }
             }
@@ -261,18 +264,22 @@ namespace MadLad
             Console.ResetColor();
         }
 
-        private static void PrintErrors(IEnumerable<Error> errors, string input)
+        private static void PrintErrors(IEnumerable<Error> errors, SourceText text, string input)
         {
             foreach (var error in errors)
             {
-                
+                // Stuff for line numbers
+                var lineindex = text.GetLineIndex(error.Span.Start);
+                var linenumber = lineindex + 1;
+                var character = error.Span.Start - text.Lines[lineindex].Start + 1;
+
                 // Print the message
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"{error} at: ");
+                Console.Write($"({linenumber}, {character}): {error} at: ");
                 Console.ResetColor();
                 
                 // Prevent it from trying to highlight an empty token
-                if (error.Details.Contains("EOF"))
+                if (error.Details.Contains("Unexpected Token <EOFToken>"))
                 {
                     Console.WriteLine();
                     // Print arrow
