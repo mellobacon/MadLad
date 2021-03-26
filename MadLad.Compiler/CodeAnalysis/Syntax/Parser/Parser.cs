@@ -103,7 +103,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             {
                 case SyntaxKind.OpenParenToken:
                     var left = NextToken();
-                    var expression = ParseBinaryExpression();
+                    var expression = ParseAssignmentExpression();
                     var right = MatchToken(SyntaxKind.CloseParenToken);
                     return new GroupedExpression(left, expression, right);
                 case SyntaxKind.TrueKeyword:
