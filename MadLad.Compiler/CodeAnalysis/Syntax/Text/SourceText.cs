@@ -33,7 +33,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
                 }
             }
 
-            if (position > start)
+            if (position >= start)
             {
                 AddLine(sourcetext, position, start, 0, result);
             }
@@ -50,7 +50,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
                 return 2;
             }
 
-            if (character == '\r' || character == '\r')
+            if (character == '\r' || character == '\n')
             {
                 return 1;
             }
