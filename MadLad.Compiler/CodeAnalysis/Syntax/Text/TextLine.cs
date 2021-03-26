@@ -6,7 +6,7 @@
         public readonly int Start;
         private readonly int Length;
         private readonly int LengthWithBreak;
-        private int End => Start + Length;
+        public int End => Start + Length;
         private TextSpan Span => new(Start, Length);
         public TextSpan SpanWithBreak => new(Start, LengthWithBreak);
 
