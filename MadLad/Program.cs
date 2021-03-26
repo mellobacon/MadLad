@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Evaluator;
 using MadLad.Compiler.CodeAnalysis.Syntax;
@@ -11,32 +12,51 @@ namespace MadLad
 {
     internal static class Program
     {
-        private static string prompt = "> ";
+        private static string prompt = "→ ";
+        private const string multi_line_prompt = "· ";
         private const string command_prompt = "#";
 
         private static void Main()
         {
             var variables = new Dictionary<Variable, object>();
+            var textbuilder = new StringBuilder();
             
             Console.WriteLine("MadLad Compooler but its a REPL instead");
             while (true)
             {
-                Console.Write(prompt);
-                var input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input))
+                if (textbuilder.Length == 0)
                 {
-                    return;
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(prompt);
+                    Console.ResetColor();
                 }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(multi_line_prompt);
+                    Console.ResetColor();
+                }
+                
+                var input = Console.ReadLine();
+                var isblank = string.IsNullOrWhiteSpace(input);
 
-                if (input.StartsWith("#"))
+                if (isblank && textbuilder.Length == 0)
+                {
+                    break;
+                }
+                
+                if (!isblank && input.StartsWith("#"))
                 {
                     ProcessCommand(input);
                 }
                 else
                 {
+                    textbuilder.AppendLine(input);
+                
+                    var text = textbuilder.ToString();
                     if (showbasiclexer || showfullexer)
                     {
-                        var Lexer = new Lexer(SourceText.From(input));
+                        var Lexer = new Lexer(SourceText.From(text));
                         while (true)
                         {
                             var errors = Lexer.Errors;
@@ -69,8 +89,12 @@ namespace MadLad
                     else
                     {
                         // blah blah compiler stuff
-                        var syntaxtree = SyntaxTree.Parse(input);
-                        
+                        var syntaxtree = SyntaxTree.Parse(text);
+                        if (!isblank && syntaxtree.Errors.Any())
+                        {
+                            continue;
+                        }
+                            
                         if (showtree)
                         {
                             ShowTree(syntaxtree.Root);   
@@ -89,8 +113,9 @@ namespace MadLad
                         }
 
                         var sourcetext = syntaxtree.Text;
-                        
-                        PrintErrors(errors, sourcetext, input);
+                            
+                        PrintErrors(errors, sourcetext, text);
+                        textbuilder.Clear();
                     }
                 }
             }
@@ -271,21 +296,25 @@ namespace MadLad
                 // Stuff for line numbers
                 var lineindex = text.GetLineIndex(error.Span.Start);
                 var linenumber = lineindex + 1;
-                var character = error.Span.Start - text.Lines[lineindex].Start + 1;
+                var line = text.Lines[lineindex];
+                var character = error.Span.Start - line.Start + 1;
 
                 // Print the message
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write($"({linenumber}, {character}): {error} at: ");
                 Console.ResetColor();
                 
+                var prefixspan = TextSpan.FromBounds(line.Start, error.Span.Start);
+                var suffixspan = TextSpan.FromBounds(error.Span.End, line.End);
+                
                 // Prevent it from trying to highlight an empty token
-                if (error.Details.Contains("Unexpected Token <EOFToken>"))
+                if (error.Details.Contains("Unexpected token <EOFToken>"))
                 {
                     Console.WriteLine();
                     // Print arrow
-                    Console.WriteLine(input);
+                    Console.WriteLine(text);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    for (int _ = 0; _ < input.Substring(0, error.Span.Start).Length; _++)
+                    for (int _ = 0; _ < text.ToString(prefixspan).Length; _++)
                     {
                         Console.Write(" ");
                     }
@@ -293,10 +322,10 @@ namespace MadLad
                     Console.ResetColor();
                     break;
                 }
-                
-                var prefix = input.Substring(0, error.Span.Start);
-                var occurrence = input.Substring(error.Span.Start, error.Span.Length);
-                var suffix = input.Substring(error.Span.End);
+
+                var prefix = text.ToString(prefixspan);
+                var occurrence = text.ToString(error.Span);
+                var suffix = text.ToString(suffixspan);
 
                 // Print what is before the error
                 Console.WriteLine("   ");
@@ -306,7 +335,7 @@ namespace MadLad
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Write(occurrence);
                 Console.ResetColor();
-                            
+                
                 // Print what is after the error
                 Console.Write(suffix);
                 Console.WriteLine();
