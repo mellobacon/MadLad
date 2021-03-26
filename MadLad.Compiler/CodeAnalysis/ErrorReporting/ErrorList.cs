@@ -33,31 +33,31 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
 
         public void ReportUnexpectedToken(TextSpan span, SyntaxKind actual, SyntaxKind expected)
         {
-            var message = $"Error: Unexpected token <{actual}>, expected <{expected}>.";
+            var message = $"Error: Unexpected token <{actual}>, expected <{expected}>";
             Report(span, message);
         }
 
         public void ReportInvalidNumber(TextSpan span, string text, Type type)
         {
-            var message = $"The number {text} is not a valid {type}.";
+            var message = $"The number {text} is not a valid {type}";
             Report(span, message);
         }
 
         public void ReportUndefinedBinaryOperator(TextSpan span, string op, Type left, Type right)
         {
-            var message = $"Binary operator '{op}' is not defined for the types {left} and {right}.";
+            var message = $"Binary operator '{op}' is not defined for the types {left} and {right}";
             Report(span, message);
         }
 
         public void ReportUndefinedUnaryOperator(TextSpan span, string op, Type operand)
         {
-            var message = $"Unary operator '{op}' is not defined for the type {operand}.";
+            var message = $"Unary operator '{op}' is not defined for the type {operand}";
             Report(span, message);
         }
         
         public void ReportUndefinedName(TextSpan span, string name)
         {
-            var message = $"Variable '{name}' does not exist.";
+            var message = $"Variable '{name}' does not exist";
             Report(span, message);
         }
     }
