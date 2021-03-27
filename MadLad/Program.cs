@@ -113,8 +113,8 @@ namespace MadLad
                         }
 
                         var sourcetext = syntaxtree.Text;
-                            
-                        PrintErrors(errors, sourcetext, text);
+                        
+                        PrintErrors(errors, sourcetext);
                         textbuilder.Clear();
                     }
                 }
@@ -289,7 +289,7 @@ namespace MadLad
             Console.ResetColor();
         }
 
-        private static void PrintErrors(IEnumerable<Error> errors, SourceText text, string input)
+        private static void PrintErrors(IEnumerable<Error> errors, SourceText text)
         {
             foreach (var error in errors)
             {
@@ -301,27 +301,18 @@ namespace MadLad
 
                 // Print the message
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"({linenumber}, {character}): {error} at: ");
+                Console.Write($"({linenumber}, {character}): {error}");
                 Console.ResetColor();
-                
-                var prefixspan = TextSpan.FromBounds(line.Start, error.Span.Start);
-                var suffixspan = TextSpan.FromBounds(error.Span.End, line.End);
-                
+
                 // Prevent it from trying to highlight an empty token
                 if (error.Details.Contains("Unexpected token <EOFToken>"))
                 {
                     Console.WriteLine();
-                    // Print arrow
-                    Console.WriteLine(text);
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    for (int _ = 0; _ < text.ToString(prefixspan).Length; _++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.WriteLine("^");
-                    Console.ResetColor();
                     break;
                 }
+                
+                var prefixspan = TextSpan.FromBounds(line.Start, error.Span.Start);
+                var suffixspan = TextSpan.FromBounds(error.Span.End, line.End);
 
                 var prefix = text.ToString(prefixspan);
                 var occurrence = text.ToString(error.Span);
