@@ -12,7 +12,7 @@ namespace MadLad
 {
     internal static class Program
     {
-        private static string prompt = "→ ";
+        private static string prompt = "> ";
         private const string multi_line_prompt = "· ";
         private const string command_prompt = "#";
 
