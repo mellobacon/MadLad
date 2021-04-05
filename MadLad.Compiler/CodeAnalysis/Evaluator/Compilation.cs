@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using MadLad.Compiler.CodeAnalysis.Binding;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
@@ -23,7 +24,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             var expression = binder.BindExpression(SyntaxTree.Root);
             
             // Get the errors from the syntax tree and from binding
-            var Errors = SyntaxTree.Errors.Concat(binder.Errors);
+            var Errors = SyntaxTree.Errors.Concat(binder.Errors).ToImmutableArray();
             
             // Evaluate the expression
             var evaluator = new Evaluator(expression, variables);
@@ -35,7 +36,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             }
 
             // Return the value or errors if there are any
-            return new EvaluationResult(Array.Empty<Error>(), value);
+            return new EvaluationResult(ImmutableArray<Error>.Empty, value);
         }
     }
 }
