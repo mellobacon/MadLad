@@ -26,7 +26,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
             Value = value;
             Position = position;
         }
-
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             return Enumerable.Empty<SyntaxNode>();

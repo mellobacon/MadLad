@@ -1,4 +1,5 @@
-﻿using MadLad.Compiler.CodeAnalysis.ErrorReporting;
+﻿using System.Globalization;
+using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
@@ -193,7 +194,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                 {
                     ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, typeof(int));
                 }
-                Value = value;   
+                Value = value;
             }
         }
 
@@ -208,7 +209,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
 
         private void ReadLetterToken()
         {
-            while (char.IsLetter(Current) || Current == '_')
+            while (char.IsLetter(Current) || Current == '_' || char.IsDigit(Current))
             {
                 Advance(1);
             }
