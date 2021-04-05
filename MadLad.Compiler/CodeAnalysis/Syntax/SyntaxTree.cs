@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
@@ -8,14 +9,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
 {
     public class SyntaxTree
     {
-        public readonly IEnumerable<Error> Errors;
+        public readonly ImmutableArray<Error> Errors;
         public readonly SourceText Text;
         public readonly ExpressionSyntax Root;
         private readonly SyntaxToken Eoftoken;
 
-        public SyntaxTree(SourceText text, IEnumerable<Error> errors, ExpressionSyntax root, SyntaxToken eoftoken)
+        public SyntaxTree(SourceText text, ImmutableArray<Error> errors, ExpressionSyntax root, SyntaxToken eoftoken)
         {
-            Errors = errors.ToArray();
+            Errors = errors;
             Text = text;
             Root = root;
             Eoftoken = eoftoken;
@@ -29,6 +30,21 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
             var parser = new Parser.Parser(sourcetext);
             // Parse the input
             return parser.Parse();
+        }
+
+        public static IEnumerable<SyntaxToken> ParseTokens(string text)
+        {
+            var lexer = new Lexer.Lexer(SourceText.From(text));
+            while (true)
+            {
+                var token = lexer.Lex();
+                if (token.Kind == SyntaxKind.EOFToken)
+                {
+                    break;
+                }
+
+                yield return token;
+            }
         }
     }
 }
