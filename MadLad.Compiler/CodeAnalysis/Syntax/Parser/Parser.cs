@@ -11,7 +11,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         private readonly SourceText Text;
         private readonly ImmutableArray<SyntaxToken> Tokens;
         private readonly ErrorList ErrorList = new();
-        private ErrorList Errors => ErrorList;
+        public ErrorList Errors => ErrorList;
 
         private int Position;
         private SyntaxToken Current => Peek(0);
@@ -38,14 +38,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             Tokens = tokens.ToImmutableArray();
             ErrorList.AddRange(lexer.Errors); // add any errors while lexing to the error list
         }
-        
+
         // Analyze the tokens
-        public SyntaxTree Parse()
+        public CompilationUnit ParseCompilationUnit()
         {
             // parse the expression
             var primaryexpression = ParseAssignmentExpression();
             var eoftoken = MatchToken(SyntaxKind.EOFToken);
-            return new SyntaxTree(Text, ErrorList.ToImmutableArray(), primaryexpression, eoftoken);
+            return new CompilationUnit(primaryexpression, eoftoken);
         }
 
         private ExpressionSyntax ParseAssignmentExpression()

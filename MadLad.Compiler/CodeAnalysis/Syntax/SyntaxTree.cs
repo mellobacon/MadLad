@@ -11,15 +11,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
     {
         public readonly ImmutableArray<Error> Errors;
         public readonly SourceText Text;
-        public readonly ExpressionSyntax Root;
-        private readonly SyntaxToken Eoftoken;
+        public readonly CompilationUnit Root;
 
-        public SyntaxTree(SourceText text, ImmutableArray<Error> errors, ExpressionSyntax root, SyntaxToken eoftoken)
+        private SyntaxTree(SourceText text)
         {
-            Errors = errors;
+            var parser = new Parser.Parser(text);
+            Root = parser.ParseCompilationUnit();
             Text = text;
-            Root = root;
-            Eoftoken = eoftoken;
+            Errors = parser.Errors.ToImmutableArray();
         }
 
         public static SyntaxTree Parse(string text)
@@ -27,9 +26,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
             // Convert the text into sourcetext
             var sourcetext = SourceText.From(text);
             // Lex the input
-            var parser = new Parser.Parser(sourcetext);
+            //var parser = new Parser.Parser(sourcetext);
             // Parse the input
-            return parser.Parse();
+            return new SyntaxTree(sourcetext);
         }
 
         public static IEnumerable<SyntaxToken> ParseTokens(string text)

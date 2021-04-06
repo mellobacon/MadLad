@@ -27,6 +27,8 @@
         TrueKeyword,
         FalseKeyword,
         
+        CompilationUnit,
+        
         // Expressions
         LiteralExpression,
         BinaryExpression,
