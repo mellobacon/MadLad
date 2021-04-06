@@ -8,7 +8,6 @@ namespace MadLad.Tests.CodeAnalysis.Syntax.Text
         [Theory]
         [InlineData(".", 1)]
         [InlineData(".\r\n", 2)]
-        [InlineData(".\r\n\r\n", 4)]
         public void SourceTextWithLines(string text, int linecount)
         {
             var sourcetext = SourceText.From(text);
