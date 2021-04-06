@@ -60,5 +60,11 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             var message = $"Variable '{name}' does not exist";
             Report(span, message);
         }
+
+        public void ReportVariableAlreadyExists(TextSpan span, string name)
+        {
+            var message = $"Variable '{name}' is already declared";
+            Report(span, message);
+        }
     }
 }
