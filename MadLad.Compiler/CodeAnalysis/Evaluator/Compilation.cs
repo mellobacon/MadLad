@@ -21,7 +21,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
         {
             // Get the expression
             var binder = new Binder(variables);
-            var expression = binder.BindExpression(SyntaxTree.Root);
+            var expression = binder.BindExpression(SyntaxTree.Root.Expression);
             
             // Get the errors from the syntax tree and from binding
             var Errors = SyntaxTree.Errors.Concat(binder.Errors).ToImmutableArray();
