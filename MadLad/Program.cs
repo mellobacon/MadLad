@@ -15,12 +15,13 @@ namespace MadLad
         private static string prompt = "» ";
         private const string multi_line_prompt = "· ";
         private const string command_prompt = "#";
+        static Compilation previous;
 
         private static void Main()
         {
             var variables = new Dictionary<Variable, object>();
             var textbuilder = new StringBuilder();
-            
+
             Console.WriteLine("MadLad Compooler but its a REPL instead");
             while (true)
             {
@@ -101,7 +102,13 @@ namespace MadLad
                         }
 
                         // if there are errors dont evaluate
-                        var compilation = new Compilation(syntaxtree);
+                        
+                        Compilation compilation;
+                        if (previous == null)
+                            compilation = new Compilation(syntaxtree);
+                        else
+                            compilation = previous.Continue(syntaxtree);
+                        
                         var result = compilation.Evaluate(variables);
                         var errors = result.Errors;
 
@@ -110,6 +117,8 @@ namespace MadLad
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine(result.Value);
                             Console.ResetColor();
+
+                            previous = compilation;
                         }
 
                         var sourcetext = syntaxtree.Text;
@@ -121,6 +130,8 @@ namespace MadLad
             }
         }
 
+        #region Commands and stuff
+        
         private static bool showbasiclexer;
         private static bool showfullexer;
         private static bool showtree;
@@ -171,6 +182,10 @@ namespace MadLad
                 showbasiclexer = false;
                 showfullexer = false;
                 Console.WriteLine(showtree ? "Syntax Tree Enabled" : "Syntax Tree Disabled");
+            }
+            else if (command.Contains($"{command_prompt}reset") && debug)
+            {
+                previous = null;
             }
             else if (command.Contains($"{command_prompt}help"))
             {
@@ -284,6 +299,7 @@ namespace MadLad
             Console.WriteLine("#showlexer --basic (DEBUG MODE ONLY)");
             Console.WriteLine("#showlexer --full (DEBUG MODE ONLY)");
             Console.WriteLine("#showtree (DEBUG MODE ONLY)");
+            Console.WriteLine("#reset (DEBUG MODE ONLY)");
             Console.WriteLine("#clear");
             Console.WriteLine("#exit");
             Console.ResetColor();
@@ -345,5 +361,6 @@ namespace MadLad
                 Console.ResetColor();
             }
         }
+        #endregion
     }
 }

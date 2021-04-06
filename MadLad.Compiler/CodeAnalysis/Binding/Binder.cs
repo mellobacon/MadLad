@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
@@ -10,15 +11,50 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 {
     public class Binder
     {
-        private readonly Dictionary<Variable, object> Variables;
+        private BoundScope Scope;
         private readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
 
-        public Binder(Dictionary<Variable, object> variables)
+        public Binder(BoundScope parent)
         {
-            Variables = variables;
+            Scope = new BoundScope(parent);
         }
-        
+
+        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnit syntax)
+        {
+            var parentscope = CreateParentScopes(previous);
+            var binder = new Binder(parentscope);
+            var expression = binder.BindExpression(syntax.Expression);
+            var variables = binder.Scope.GetDeclaredVariables();
+            var errors = binder.Errors.ToImmutableArray();
+            return new BoundGlobalScope(previous, errors, variables, expression);
+        }
+
+        private static BoundScope CreateParentScopes(BoundGlobalScope previous)
+        {
+            var stack = new Stack<BoundGlobalScope>();
+            while (previous != null)
+            {
+                stack.Push(previous);
+                previous = previous.Previous;
+            }
+
+            BoundScope current = null;
+            while (stack.Count > 0)
+            {
+                previous = stack.Pop();
+                var scope = new BoundScope(current);
+                foreach (var v in previous.Variables)
+                {
+                    scope.TryDeclare(v);
+                }
+
+                current = scope;
+            }
+
+            return current;
+        }
+
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
             return syntax.Kind switch
@@ -75,14 +111,11 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             var expression = BindExpression(syntax.Expression);
 
             var variable = new Variable(name, expression.Type);
-            
-            var existingvariable = Variables.Keys.FirstOrDefault(v => v.Name == name);
-            if (existingvariable != null)
+
+            if (!Scope.TryDeclare(variable))
             {
-                Variables.Remove(existingvariable);
+                ErrorList.ReportVariableAlreadyExists(syntax.VariableToken.Span, name);
             }
-            
-            Variables[variable] = null;
             
             return new AssignmentBoundExpression(variable, expression);
         }
@@ -90,8 +123,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         private BoundExpression BindNameExpression(NameExpression syntax)
         {
             var name = syntax.IdentifierToken.Text;
-            var variable = Variables.Keys.FirstOrDefault(v => v.Name == name);
-            if (variable == null)
+            if (!Scope.TryLookup(name, out var variable))
             {
                 ErrorList.ReportUndefinedName(syntax.IdentifierToken.Span, name);
                 return new LiteralBoundExpression(0);
