@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
+using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
@@ -42,10 +43,42 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         // Analyze the tokens
         public CompilationUnit ParseCompilationUnit()
         {
-            // parse the expression
-            var primaryexpression = ParseAssignmentExpression();
+            // parse the statement
+            var statement = ParseStatement();
             var eoftoken = MatchToken(SyntaxKind.EOFToken);
-            return new CompilationUnit(primaryexpression, eoftoken);
+            return new CompilationUnit(statement, eoftoken);
+        }
+        
+        private StatementSyntax ParseStatement()
+        {
+            if (Current.Kind == SyntaxKind.OpenBracketToken)
+            {
+                return ParseBlockStatement();
+            }
+            return ParseExpressionStatement();
+        }
+
+        private BlockStatement ParseBlockStatement()
+        {
+            var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
+            var openbracket = MatchToken(SyntaxKind.OpenBracketToken);
+
+            while (Current.Kind != SyntaxKind.EOFToken && Current.Kind != SyntaxKind.ClosedBracketToken)
+            {
+                var statement = ParseStatement();
+                statements.Add(statement);
+            }
+            
+            var closedbracket = MatchToken(SyntaxKind.ClosedBracketToken);
+            
+            return new BlockStatement(openbracket, statements.ToImmutable(), closedbracket);
+        }
+        
+        private ExpressionStatement ParseExpressionStatement()
+        {
+            var expression = ParseAssignmentExpression();
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new ExpressionStatement(expression, semicolon);
         }
 
         private ExpressionSyntax ParseAssignmentExpression()
