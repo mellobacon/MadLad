@@ -24,10 +24,12 @@
         OpenBracketToken,
         ClosedBracketToken,
         SemicolonToken,
-
         VariableToken,
+        
+        // Keywords
         TrueKeyword,
         FalseKeyword,
+        VarKeyword,
         
         CompilationUnit,
         
@@ -42,6 +44,7 @@
         // Statements
         BlockStatement,
         ExpressionStatement,
+        VariableDeclaration,
 
         // Empty
         BadToken,
