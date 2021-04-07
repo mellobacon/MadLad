@@ -40,6 +40,11 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                 case ExpressionBoundStatement e:
                     LastValue = EvaluateExpression(e.Expression);
                     break;
+                case BoundVariableDeclaration v:
+                    var value = EvaluateExpression(v.Expression);
+                    Variables[v.Variable] = value;
+                    LastValue = value;
+                    break;
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
             }
