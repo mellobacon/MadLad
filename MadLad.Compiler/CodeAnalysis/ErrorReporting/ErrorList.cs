@@ -66,5 +66,11 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             var message = $"Variable '{name}' is already declared";
             Report(span, message);
         }
+
+        public void ReportCannotConvertType(TextSpan span, Type from, Type to)
+        {
+            var message = $"Cannont convert type '{from}' to type '{to}'";
+            Report(span, message);
+        }
     }
 }
