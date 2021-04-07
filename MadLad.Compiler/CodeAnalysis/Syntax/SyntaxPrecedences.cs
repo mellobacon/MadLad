@@ -39,6 +39,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
             {
                 "true" => SyntaxKind.TrueKeyword,
                 "false" => SyntaxKind.FalseKeyword,
+                "var" => SyntaxKind.VarKeyword,
                 _ => SyntaxKind.VariableToken
             };
         }
