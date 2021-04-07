@@ -6,7 +6,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 {
     public sealed class BoundScope
     {
-        readonly BoundScope Parent;
+        public readonly BoundScope Parent;
         Dictionary<string, Variable> variables = new();
 
         public BoundScope(BoundScope parent)
