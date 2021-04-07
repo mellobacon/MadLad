@@ -6,9 +6,9 @@
     public enum SyntaxKind
     {
         // Tokens
-        NumberToken,
-        
         WhitespaceToken,
+        
+        NumberToken,
         PlusToken,
         MinusToken,
         StarToken,
@@ -20,8 +20,10 @@
         BangToken,
         NotEqualsToken,
         OrPipeToken,
-        HatToken,
         AndAmpersandToken,
+        OpenBracketToken,
+        ClosedBracketToken,
+        SemicolonToken,
 
         VariableToken,
         TrueKeyword,
@@ -36,6 +38,10 @@
         UnaryExpression,
         AssignmentExpression,
         NameExpression,
+        
+        // Statements
+        BlockStatement,
+        ExpressionStatement,
 
         // Empty
         BadToken,
