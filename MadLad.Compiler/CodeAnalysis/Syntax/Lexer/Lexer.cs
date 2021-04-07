@@ -106,6 +106,18 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     Kind = SyntaxKind.CloseParenToken;
                     Advance(1);
                     break;
+                case '{':
+                    Kind = SyntaxKind.OpenBracketToken;
+                    Advance(1);
+                    break;
+                case '}':
+                    Kind = SyntaxKind.ClosedBracketToken;
+                    Advance(1);
+                    break;
+                case ';':
+                    Kind = SyntaxKind.SemicolonToken;
+                    Advance(1);
+                    break;
                 case '0': case '1': case '2':
                 case '3': case '4': case '5':
                 case '6': case '7': case '8':
