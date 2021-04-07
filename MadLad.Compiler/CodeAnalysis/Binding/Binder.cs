@@ -1,61 +1,54 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
+using MadLad.Compiler.CodeAnalysis.Binding.Statements;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
+using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
     public class Binder
     {
-        private BoundScope Scope;
+        private readonly BoundScope Scope;
         private readonly ErrorList ErrorList = new();
-        public ErrorList Errors => ErrorList;
+        private ErrorList Errors => ErrorList;
 
-        public Binder(BoundScope parent)
+        private Binder(BoundScope parent)
         {
             Scope = new BoundScope(parent);
         }
 
-        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnit syntax)
+        private BoundStatement BindStatement(StatementSyntax statement)
         {
-            var parentscope = CreateParentScopes(previous);
-            var binder = new Binder(parentscope);
-            var expression = binder.BindExpression(syntax.Expression);
-            var variables = binder.Scope.GetDeclaredVariables();
-            var errors = binder.Errors.ToImmutableArray();
-            return new BoundGlobalScope(previous, errors, variables, expression);
+            return statement.Kind switch
+            {
+                SyntaxKind.BlockStatement => BindBlockStatement((BlockStatement)statement),
+                SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatement)statement),
+                _ => throw new Exception($"Unexpected syntax {statement.Kind}")
+            };
         }
 
-        private static BoundScope CreateParentScopes(BoundGlobalScope previous)
+        private BoundStatement BindBlockStatement(BlockStatement syntax)
         {
-            var stack = new Stack<BoundGlobalScope>();
-            while (previous != null)
+            var statements = ImmutableArray.CreateBuilder<BoundStatement>();
+            foreach (var _statement in syntax.Statements)
             {
-                stack.Push(previous);
-                previous = previous.Previous;
+                var statement = BindStatement(_statement);
+                statements.Add(statement);
             }
-
-            BoundScope current = null;
-            while (stack.Count > 0)
-            {
-                previous = stack.Pop();
-                var scope = new BoundScope(current);
-                foreach (var v in previous.Variables)
-                {
-                    scope.TryDeclare(v);
-                }
-
-                current = scope;
-            }
-
-            return current;
+            return new BlockBoundStatement(statements.ToImmutable());
         }
 
-        public BoundExpression BindExpression(ExpressionSyntax syntax)
+        private BoundStatement BindExpressionStatement(ExpressionStatement syntax)
+        {
+            var expression = BindExpression(syntax.Expression);
+            return new ExpressionBoundStatement(expression);
+        }
+
+        private BoundExpression BindExpression(ExpressionSyntax syntax)
         {
             return syntax.Kind switch
             {
@@ -110,13 +103,21 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             var name = syntax.VariableToken.Text;
             var expression = BindExpression(syntax.Expression);
 
-            var variable = new Variable(name, expression.Type);
-
-            if (!Scope.TryDeclare(variable))
+            if (!Scope.TryLookup(name, out var variable))
             {
-                ErrorList.ReportVariableAlreadyExists(syntax.VariableToken.Span, name);
+                variable = new Variable(name, expression.Type);
+                if (!Scope.TryDeclare(variable))
+                {
+                    ErrorList.ReportVariableAlreadyExists(syntax.VariableToken.Span, name);
+                }
             }
-            
+
+            if (expression.Type != variable.Type)
+            {
+                //ErrorList.ReportCannotConvertType(syntax.Expression, expression.Type, variable.Type);
+                return expression;
+            }
+
             return new AssignmentBoundExpression(variable, expression);
         }
 
@@ -130,6 +131,41 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             }
             
             return new VariableBoundExpression(variable);
+        }
+        
+        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnit syntax)
+        {
+            var parentscope = CreateParentScopes(previous);
+            var binder = new Binder(parentscope);
+            var statement = binder.BindStatement(syntax.Expression);
+            var variables = binder.Scope.GetDeclaredVariables();
+            var errors = binder.Errors.ToImmutableArray();
+            return new BoundGlobalScope(previous, errors, variables, statement);
+        }
+
+        private static BoundScope CreateParentScopes(BoundGlobalScope previous)
+        {
+            var stack = new Stack<BoundGlobalScope>();
+            while (previous != null)
+            {
+                stack.Push(previous);
+                previous = previous.Previous;
+            }
+
+            BoundScope current = null;
+            while (stack.Count > 0)
+            {
+                previous = stack.Pop();
+                var scope = new BoundScope(current);
+                foreach (var v in previous.Variables)
+                {
+                    scope.TryDeclare(v);
+                }
+
+                current = scope;
+            }
+
+            return current;
         }
     }
 }
