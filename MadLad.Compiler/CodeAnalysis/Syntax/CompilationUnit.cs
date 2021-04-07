@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
+using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax
 {
     // used to make more than one syntax tree apparently
     public sealed class CompilationUnit : SyntaxNode
     {
-        public readonly ExpressionSyntax Expression;
+        public readonly StatementSyntax Expression;
         readonly SyntaxToken Eoftoken;
 
-        public CompilationUnit(ExpressionSyntax expression, SyntaxToken eoftoken)
+        public CompilationUnit(StatementSyntax expression, SyntaxToken eoftoken)
         {
             Expression = expression;
             Eoftoken = eoftoken;
