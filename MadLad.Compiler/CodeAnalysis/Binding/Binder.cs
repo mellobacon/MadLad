@@ -12,7 +12,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 {
     public class Binder
     {
-        private readonly BoundScope Scope;
+        private BoundScope Scope;
         private readonly ErrorList ErrorList = new();
         private ErrorList Errors => ErrorList;
 
@@ -27,6 +27,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             {
                 SyntaxKind.BlockStatement => BindBlockStatement((BlockStatement)statement),
                 SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatement)statement),
+                SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclaration)statement),
                 _ => throw new Exception($"Unexpected syntax {statement.Kind}")
             };
         }
@@ -34,18 +35,35 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         private BoundStatement BindBlockStatement(BlockStatement syntax)
         {
             var statements = ImmutableArray.CreateBuilder<BoundStatement>();
+            Scope = new BoundScope(Scope);
             foreach (var _statement in syntax.Statements)
             {
                 var statement = BindStatement(_statement);
                 statements.Add(statement);
             }
+            Scope = Scope.Parent;
+            
             return new BlockBoundStatement(statements.ToImmutable());
         }
-
+        
         private BoundStatement BindExpressionStatement(ExpressionStatement syntax)
         {
             var expression = BindExpression(syntax.Expression);
             return new ExpressionBoundStatement(expression);
+        }
+
+        private BoundStatement BindVariableDeclaration(VariableDeclaration syntax)
+        {
+            var name = syntax.Variable.Text;
+            var expression = BindExpression(syntax.Expression);
+            var variable = new Variable(name, expression.Type);
+
+            if (!Scope.TryDeclare(variable))
+            {
+                ErrorList.ReportVariableAlreadyExists(syntax.Variable.Span, name);
+            }
+
+            return new BoundVariableDeclaration(variable, expression);
         }
 
         private BoundExpression BindExpression(ExpressionSyntax syntax)
@@ -105,11 +123,8 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
             if (!Scope.TryLookup(name, out var variable))
             {
-                variable = new Variable(name, expression.Type);
-                if (!Scope.TryDeclare(variable))
-                {
-                    ErrorList.ReportVariableAlreadyExists(syntax.VariableToken.Span, name);
-                }
+                ErrorList.ReportUndefinedName(syntax.VariableToken.Span, name);
+                return expression;
             }
 
             if (expression.Type != variable.Type)
