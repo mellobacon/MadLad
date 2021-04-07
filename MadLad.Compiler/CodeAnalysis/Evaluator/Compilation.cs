@@ -55,7 +55,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             var Errors = SyntaxTree.Errors.Concat(globalScope.Errors).ToImmutableArray();
             
             // Evaluate the expression
-            var evaluator = new Evaluator(globalScope.Expression, variables);
+            var evaluator = new Evaluator(globalScope.Statement, variables);
             var value = evaluator.Evaluate();
 
             if (Errors.Any())
