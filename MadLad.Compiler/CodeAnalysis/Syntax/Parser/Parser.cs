@@ -51,11 +51,12 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         
         private StatementSyntax ParseStatement()
         {
-            if (Current.Kind == SyntaxKind.OpenBracketToken)
+            return Current.Kind switch
             {
-                return ParseBlockStatement();
-            }
-            return ParseExpressionStatement();
+                SyntaxKind.OpenBracketToken => ParseBlockStatement(),
+                SyntaxKind.VarKeyword => ParseVariableDeclaration(),
+                _ => ParseExpressionStatement()
+            };
         }
 
         private BlockStatement ParseBlockStatement()
@@ -79,6 +80,16 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             var expression = ParseAssignmentExpression();
             var semicolon = MatchToken(SyntaxKind.SemicolonToken);
             return new ExpressionStatement(expression, semicolon);
+        }
+
+        private StatementSyntax ParseVariableDeclaration()
+        {
+            var keyword = MatchToken(SyntaxKind.VarKeyword);
+            var variable = MatchToken(SyntaxKind.VariableToken);
+            var equals = MatchToken(SyntaxKind.EqualsToken);
+            var expression = ParseAssignmentExpression();
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new VariableDeclaration(keyword, variable, equals, expression, semicolon);
         }
 
         private ExpressionSyntax ParseAssignmentExpression()
