@@ -27,13 +27,13 @@ namespace MadLad
             {
                 if (textbuilder.Length == 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write(prompt);
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write(multi_line_prompt);
                     Console.ResetColor();
                 }
