@@ -5,6 +5,7 @@
         // Statements
         BlockStatement,
         ExpressionStatement,
+        VariableDeclaration,
         
         // Expressions
         LiteralExpression,
