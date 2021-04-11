@@ -73,6 +73,10 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                             BinaryBoundOperatorKind.Division => Convert.ToSingle(left) / Convert.ToSingle(right),
                             BinaryBoundOperatorKind.Equals => Equals(left, right),
                             BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
+                            BinaryBoundOperatorKind.LessThan => Convert.ToSingle(left) < Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.GreaterThan => Convert.ToSingle(left) > Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.LessOrEqual => Convert.ToSingle(left) <= Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.GreaterOrEqual => Convert.ToSingle(left) >= Convert.ToSingle(right),
                             _ => throw new Exception($"Unexpected binary operator {b.Op}")
                         };
                     }
@@ -89,6 +93,10 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                         BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
                         BinaryBoundOperatorKind.LogicalAnd => (bool)left && (bool)right,
                         BinaryBoundOperatorKind.LogicalOr => (bool)left || (bool)right,
+                        BinaryBoundOperatorKind.LessThan => (int) left < (int) right,
+                        BinaryBoundOperatorKind.GreaterThan => (int) left > (int) right,
+                        BinaryBoundOperatorKind.LessOrEqual => (int) left <= (int) right,
+                        BinaryBoundOperatorKind.GreaterOrEqual => (int) left >= (int) right,
                         _ => throw new Exception($"Unexpected binary operator {b.Op}")
                     };
                 }
