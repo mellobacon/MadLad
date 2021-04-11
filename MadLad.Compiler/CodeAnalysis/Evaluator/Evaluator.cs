@@ -56,6 +56,13 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     }
                     
                     break;
+                case WhileBoundStatement w:
+                    var whilecondition = (bool)EvaluateExpression(w.Condition);
+                    while (whilecondition)
+                    {
+                        EvaluateStatement(w.Statement);
+                    }
+                    break;
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
             }
