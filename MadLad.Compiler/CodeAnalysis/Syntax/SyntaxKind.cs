@@ -34,6 +34,8 @@
         TrueKeyword,
         FalseKeyword,
         VarKeyword,
+        IfKeyword,
+        ElseKeyword,
         
         CompilationUnit,
         
@@ -49,6 +51,8 @@
         BlockStatement,
         ExpressionStatement,
         VariableDeclaration,
+        IfStatement,
+        ElseStatement,
 
         // Empty
         BadToken,
