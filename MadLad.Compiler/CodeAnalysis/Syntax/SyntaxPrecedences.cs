@@ -44,6 +44,8 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 "true" => SyntaxKind.TrueKeyword,
                 "false" => SyntaxKind.FalseKeyword,
                 "var" => SyntaxKind.VarKeyword,
+                "if" => SyntaxKind.IfKeyword,
+                "else" => SyntaxKind.ElseKeyword,
                 _ => SyntaxKind.VariableToken
             };
         }
@@ -97,6 +99,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.AndAmpersandToken => "&&",
                 SyntaxKind.TrueKeyword => "true",
                 SyntaxKind.FalseKeyword => "false",
+                SyntaxKind.VarKeyword => "var",
+                SyntaxKind.IfKeyword => "if",
+                SyntaxKind.ElseKeyword => "else",
                 _ => null
             };
         }
