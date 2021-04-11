@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -15,10 +14,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
         private readonly SyntaxTree SyntaxTree;
         private BoundGlobalScope _GlobalScope;
 
-        public Compilation(SyntaxTree syntaxtree) : this(null, syntaxtree)
-        {
-            SyntaxTree = syntaxtree;
-        }
+        public Compilation(SyntaxTree syntaxtree) : this(null, syntaxtree) {}
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
         {

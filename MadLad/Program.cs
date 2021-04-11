@@ -101,8 +101,6 @@ namespace MadLad
                             ShowTree(syntaxtree.Root);   
                         }
 
-                        // if there are errors dont evaluate
-                        
                         Compilation compilation;
                         if (previous == null)
                             compilation = new Compilation(syntaxtree);
@@ -112,6 +110,7 @@ namespace MadLad
                         var result = compilation.Evaluate(variables);
                         var errors = result.Errors;
 
+                        // if there are errors dont evaluate
                         if (!errors.Any())
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
@@ -158,7 +157,7 @@ namespace MadLad
                 else
                 {
                     Console.WriteLine("Debug Mode Disabled");
-                    prompt = "> ";
+                    prompt = "» ";
                 }
                 showbasiclexer = false;
                 showfullexer = false;

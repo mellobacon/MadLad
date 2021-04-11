@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
-using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax
@@ -15,7 +13,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
 
         private SyntaxTree(SourceText text)
         {
+            // Lex the input
             var parser = new Parser.Parser(text);
+            // Parse the input
             Root = parser.ParseCompilationUnit();
             Text = text;
             Errors = parser.Errors.ToImmutableArray();
@@ -25,9 +25,6 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         {
             // Convert the text into sourcetext
             var sourcetext = SourceText.From(text);
-            // Lex the input
-            //var parser = new Parser.Parser(sourcetext);
-            // Parse the input
             return new SyntaxTree(sourcetext);
         }
 

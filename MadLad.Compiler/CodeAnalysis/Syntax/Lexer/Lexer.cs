@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using MadLad.Compiler.CodeAnalysis.ErrorReporting;
+﻿using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer

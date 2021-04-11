@@ -13,7 +13,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         public TextSpan Span => new(Position, Text.Length);
         
         /// <summary>
-        /// Defines what a syntax token is ie what components make up a syntax token.
+        /// Defines what components make up a syntax token.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="kind"></param>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
 using MadLad.Compiler.CodeAnalysis.Binding.Statements;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
