@@ -28,9 +28,17 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
                 SyntaxKind.BlockStatement => BindBlockStatement((BlockStatement)statement),
                 SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatement)statement),
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclaration)statement),
+                SyntaxKind.WhileStatement => BindWhileStatement((WhileStatement)statement),
                 SyntaxKind.IfStatement => BindIfStatement((IfStatement)statement),
                 _ => throw new Exception($"Unexpected syntax {statement.Kind}")
             };
+        }
+
+        private BoundStatement BindWhileStatement(WhileStatement syntax)
+        {
+            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var statement = BindStatement(syntax.Dostatement);
+            return new WhileBoundStatement(condition, statement);
         }
 
         private BoundStatement BindIfStatement(IfStatement syntax)
