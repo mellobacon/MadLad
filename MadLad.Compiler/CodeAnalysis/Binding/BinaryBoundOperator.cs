@@ -44,10 +44,20 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
             new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int), typeof(bool)),
             new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float), typeof(bool)),
-            
+
             new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(bool)),
             new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(int), typeof(bool)),
             new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(float), typeof(bool)),
+            
+            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, typeof(int), typeof(bool)),
+            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, typeof(int), typeof(bool)),
+            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, typeof(float), typeof(bool)),
+            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, typeof(float), typeof(bool)),
+            
+            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, typeof(int), typeof(bool)),
+            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, typeof(int), typeof(bool)),
+            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, typeof(float), typeof(bool)),
+            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, typeof(float), typeof(bool)),
 
             new(SyntaxKind.AndAmpersandToken, BinaryBoundOperatorKind.LogicalAnd, typeof(bool)),
             new(SyntaxKind.OrPipeToken, BinaryBoundOperatorKind.LogicalOr, typeof(bool)),
