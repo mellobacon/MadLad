@@ -28,8 +28,18 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
                 SyntaxKind.BlockStatement => BindBlockStatement((BlockStatement)statement),
                 SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatement)statement),
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclaration)statement),
+                SyntaxKind.IfStatement => BindIfStatement((IfStatement)statement),
                 _ => throw new Exception($"Unexpected syntax {statement.Kind}")
             };
+        }
+
+        private BoundStatement BindIfStatement(IfStatement syntax)
+        {
+            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var statement = BindStatement(syntax.Thenstatement);
+            var elsestatement = syntax.Elsestatement == null ? null : BindStatement(syntax.Elsestatement
+                .Elsestatement);
+            return new IfBoundStatement(condition, statement, elsestatement);
         }
 
         private BoundStatement BindBlockStatement(BlockStatement syntax)
@@ -64,6 +74,17 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             }
 
             return new BoundVariableDeclaration(variable, expression);
+        }
+
+        private BoundExpression BindExpression(ExpressionSyntax syntax, Type target)
+        {
+            var result = BindExpression(syntax);
+            if (result.Type != target)
+            {
+                // return conversion error
+            }
+
+            return result;
         }
 
         private BoundExpression BindExpression(ExpressionSyntax syntax)
