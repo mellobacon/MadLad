@@ -55,8 +55,30 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             {
                 SyntaxKind.OpenBracketToken => ParseBlockStatement(),
                 SyntaxKind.VarKeyword => ParseVariableDeclaration(),
+                SyntaxKind.IfKeyword => ParseIfStatement(),
                 _ => ParseExpressionStatement()
             };
+        }
+
+        private IfStatement ParseIfStatement()
+        {
+            var iftoken = MatchToken(SyntaxKind.IfKeyword);
+            var condition = ParsePrimaryExpression();
+            var statement = ParseStatement();
+            var elsestatement = ParseElseStatement();
+            return new IfStatement(iftoken, condition, statement, elsestatement);
+        }
+
+        private ElseStatement ParseElseStatement()
+        {
+            if (Current.Kind != SyntaxKind.ElseKeyword)
+            {
+                return null;
+            }
+
+            var elsekeyword = NextToken();
+            var statement = ParseStatement();
+            return new ElseStatement(elsekeyword, statement);
         }
 
         private BlockStatement ParseBlockStatement()
