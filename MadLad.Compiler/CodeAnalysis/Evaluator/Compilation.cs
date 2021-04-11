@@ -39,7 +39,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
 
         public Compilation Continue(SyntaxTree tree)
         {
-            return new Compilation(this, tree);
+            return new (this, tree);
         }
 
         public EvaluationResult Evaluate(Dictionary<Variable, object> variables)
