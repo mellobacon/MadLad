@@ -42,27 +42,25 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     {
                         Kind = SyntaxKind.EqualsEqualsToken;
                         Advance(2);
-                        break;
                     }
                     else
                     {
                         Kind = SyntaxKind.EqualsToken;
                         Advance(1);
-                        break;
                     }
+                    break;
                 case '!':
                     if (NextToken == '=')
                     {
                         Kind = SyntaxKind.NotEqualsToken;
                         Advance(2);
-                        break;
                     }
                     else
                     {
                         Kind = SyntaxKind.BangToken;
                         Advance(1);
-                        break;
                     }
+                    break;
                 case '+':
                     Kind = SyntaxKind.PlusToken;
                     Advance(1);
