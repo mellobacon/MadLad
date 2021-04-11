@@ -8,9 +8,9 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
         public readonly BoundStatement Statement;
         public readonly BoundStatement Elsestatement;
 
-        public IfBoundStatement(BoundExpression conditiion, BoundStatement statement, BoundStatement elsestatement)
+        public IfBoundStatement(BoundExpression condition, BoundStatement statement, BoundStatement elsestatement)
         {
-            Conditiion = conditiion;
+            Conditiion = condition;
             Statement = statement;
             Elsestatement = elsestatement;
         }
