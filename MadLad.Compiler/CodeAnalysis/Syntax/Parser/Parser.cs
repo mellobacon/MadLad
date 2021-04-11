@@ -56,6 +56,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                 SyntaxKind.OpenBracketToken => ParseBlockStatement(),
                 SyntaxKind.VarKeyword => ParseVariableDeclaration(),
                 SyntaxKind.IfKeyword => ParseIfStatement(),
+                SyntaxKind.WhileKeyword => ParseWhileStatement(),
                 _ => ParseExpressionStatement()
             };
         }
@@ -79,6 +80,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             var elsekeyword = NextToken();
             var statement = ParseStatement();
             return new ElseStatement(elsekeyword, statement);
+        }
+
+        private WhileStatement ParseWhileStatement()
+        {
+            var whilekeyword = MatchToken(SyntaxKind.WhileKeyword);
+            var condition = ParsePrimaryExpression();
+            var dostatement = ParseStatement();
+            return new WhileStatement(whilekeyword, condition, dostatement);
         }
 
         private BlockStatement ParseBlockStatement()
