@@ -97,6 +97,32 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     }
                     Advance(1);
                     break;
+                case '<':
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.LessEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.LessThanToken;
+                        Advance(1);
+                    }
+
+                    break;
+                case '>':
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.GreatEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.GreaterThanToken;
+                        Advance(1);
+                    }
+
+                    break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;
                     Advance(1);
