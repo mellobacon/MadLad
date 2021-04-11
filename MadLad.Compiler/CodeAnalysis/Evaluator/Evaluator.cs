@@ -44,6 +44,18 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     Variables[v.Variable] = value;
                     LastValue = value;
                     break;
+                case IfBoundStatement f:
+                    var condition = (bool)EvaluateExpression(f.Conditiion);
+                    if (condition)
+                    {
+                        EvaluateStatement(f.Statement);
+                    }
+                    else if (f.Elsestatement != null)
+                    {
+                        EvaluateStatement(f.Elsestatement);
+                    }
+                    
+                    break;
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
             }
