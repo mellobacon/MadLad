@@ -36,6 +36,7 @@
         VarKeyword,
         IfKeyword,
         ElseKeyword,
+        WhileKeyword,
         
         CompilationUnit,
         
@@ -53,6 +54,7 @@
         VariableDeclaration,
         IfStatement,
         ElseStatement,
+        WhileStatement,
 
         // Empty
         BadToken,
