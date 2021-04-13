@@ -64,10 +64,12 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         private IfStatement ParseIfStatement()
         {
             var iftoken = MatchToken(SyntaxKind.IfKeyword);
-            var condition = ParsePrimaryExpression();
+            var openparen = MatchToken(SyntaxKind.OpenParenToken);
+            var condition = ParseBinaryExpression();
+            var closedparen = MatchToken(SyntaxKind.CloseParenToken);
             var statement = ParseStatement();
             var elsestatement = ParseElseStatement();
-            return new IfStatement(iftoken, condition, statement, elsestatement);
+            return new IfStatement(iftoken, openparen, condition, closedparen, statement, elsestatement);
         }
 
         private ElseStatement ParseElseStatement()
@@ -85,9 +87,11 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         private WhileStatement ParseWhileStatement()
         {
             var whilekeyword = MatchToken(SyntaxKind.WhileKeyword);
-            var condition = ParsePrimaryExpression();
+            var openparen = MatchToken(SyntaxKind.OpenParenToken);
+            var condition = ParseBinaryExpression();
+            var closedparen = MatchToken(SyntaxKind.CloseParenToken);
             var dostatement = ParseStatement();
-            return new WhileStatement(whilekeyword, condition, dostatement);
+            return new WhileStatement(whilekeyword, openparen, condition, closedparen, dostatement);
         }
 
         private BlockStatement ParseBlockStatement()
@@ -97,8 +101,15 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
 
             while (Current.Kind != SyntaxKind.EOFToken && Current.Kind != SyntaxKind.ClosedBracketToken)
             {
+                var starttoken = Current;
+                
                 var statement = ParseStatement();
                 statements.Add(statement);
+
+                if (Current == starttoken)
+                {
+                    NextToken();
+                }
             }
             
             var closedbracket = MatchToken(SyntaxKind.ClosedBracketToken);
