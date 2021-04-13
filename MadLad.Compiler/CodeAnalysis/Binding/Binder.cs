@@ -168,6 +168,10 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         private BoundExpression BindNameExpression(NameExpression syntax)
         {
             var name = syntax.IdentifierToken.Text;
+            if (string.IsNullOrEmpty(name))
+            {
+                return new LiteralBoundExpression(0);
+            }
             if (!Scope.TryLookup(name, out var variable))
             {
                 ErrorList.ReportUndefinedName(syntax.IdentifierToken.Span, name);
