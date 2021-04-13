@@ -1,2 +1,3 @@
-# MadLad (*being rewritten*)
+# MadLad
 A developing esolang
+Proper ReadMe coming soon
