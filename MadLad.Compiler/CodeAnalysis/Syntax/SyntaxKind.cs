@@ -37,6 +37,7 @@
         IfKeyword,
         ElseKeyword,
         WhileKeyword,
+        ForKeyword,
         
         CompilationUnit,
         
@@ -55,6 +56,7 @@
         IfStatement,
         ElseStatement,
         WhileStatement,
+        ForStatement,
 
         // Empty
         BadToken,

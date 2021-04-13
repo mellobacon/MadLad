@@ -47,6 +47,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 "if" => SyntaxKind.IfKeyword,
                 "else" => SyntaxKind.ElseKeyword,
                 "while" => SyntaxKind.WhileKeyword,
+                "for" => SyntaxKind.ForKeyword,
                 _ => SyntaxKind.VariableToken
             };
         }
@@ -104,6 +105,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.IfKeyword => "if",
                 SyntaxKind.ElseKeyword => "else",
                 SyntaxKind.WhileKeyword => "while",
+                SyntaxKind.ForKeyword => "for",
                 _ => null
             };
         }
