@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
 {
-    public class Error
+    public sealed class Error
     {
         public readonly TextSpan Span;
         public readonly string Details;

@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class VariableDeclaration : StatementSyntax
+    public sealed class VariableDeclaration : StatementSyntax
     {
         public readonly SyntaxToken Declarationkeyword;
         public readonly SyntaxToken Variable;

@@ -8,7 +8,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
-    public class Compilation
+    public sealed class Compilation
     {
         readonly Compilation Previous;
         private readonly SyntaxTree SyntaxTree;

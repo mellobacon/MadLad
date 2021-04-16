@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class WhileStatement : StatementSyntax
+    public sealed class WhileStatement : StatementSyntax
     {
         readonly SyntaxToken Whilekeyword;
         readonly SyntaxToken Openparen;

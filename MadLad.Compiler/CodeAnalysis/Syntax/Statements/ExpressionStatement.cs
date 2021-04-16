@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class ExpressionStatement : StatementSyntax
+    public sealed class ExpressionStatement : StatementSyntax
     {
         public readonly ExpressionSyntax Expression;
         readonly SyntaxToken Semicolon;

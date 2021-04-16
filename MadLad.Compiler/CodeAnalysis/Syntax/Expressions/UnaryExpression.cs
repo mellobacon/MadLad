@@ -3,7 +3,7 @@
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
 {
     // Represents a unary expression ie -5 or...!2 or something
-    public class UnaryExpression : ExpressionSyntax
+    public sealed class UnaryExpression : ExpressionSyntax
     {
         public readonly SyntaxToken OpToken;
         public readonly ExpressionSyntax Operand;

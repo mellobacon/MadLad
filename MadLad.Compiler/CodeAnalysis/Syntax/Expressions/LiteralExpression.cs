@@ -3,7 +3,7 @@
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
 {
     // Represents a number
-    public class LiteralExpression : ExpressionSyntax
+    public sealed class LiteralExpression : ExpressionSyntax
     {
         public readonly object Value;
         private readonly SyntaxToken Token;

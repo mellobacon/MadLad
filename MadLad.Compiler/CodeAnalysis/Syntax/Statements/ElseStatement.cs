@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class ElseStatement : StatementSyntax
+    public sealed class ElseStatement : StatementSyntax
     {
         private readonly SyntaxToken Elsekeyword;
         public readonly StatementSyntax Elsestatement;

@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
 {
-    public class AssignmentExpression : ExpressionSyntax
+    public sealed class AssignmentExpression : ExpressionSyntax
     {
         public readonly SyntaxToken VariableToken;
         private readonly SyntaxToken EqualsToken;

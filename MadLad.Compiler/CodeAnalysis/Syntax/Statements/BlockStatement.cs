@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class BlockStatement : StatementSyntax
+    public sealed class BlockStatement : StatementSyntax
     {
         readonly SyntaxToken Openbracket;
         public readonly ImmutableArray<StatementSyntax> Statements;

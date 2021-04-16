@@ -5,7 +5,7 @@ using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
-    public class EvaluationResult
+    public sealed class EvaluationResult
     {
         public readonly ImmutableArray<Error> Errors;
         public readonly object Value;

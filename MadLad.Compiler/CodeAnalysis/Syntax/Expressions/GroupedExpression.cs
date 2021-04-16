@@ -3,7 +3,7 @@
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
 {
     // Represents a grouped expression ie stuff surrounded in parentheses
-    public class GroupedExpression : ExpressionSyntax
+    public sealed class GroupedExpression : ExpressionSyntax
     {
         private readonly SyntaxToken Openparentoken;
         public readonly ExpressionSyntax Expression;

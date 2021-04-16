@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
 {
-    public class NameExpression : ExpressionSyntax
+    public sealed class NameExpression : ExpressionSyntax
     {
         public readonly SyntaxToken IdentifierToken;
         public NameExpression(SyntaxToken identifierToken)

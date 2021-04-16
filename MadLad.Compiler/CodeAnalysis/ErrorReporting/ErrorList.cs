@@ -7,7 +7,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
 {
     // a list of errors to call when theres an error
-    public class ErrorList : IEnumerable<Error>
+    public sealed class ErrorList : IEnumerable<Error>
     {
         private readonly List<Error> Errors = new();
         

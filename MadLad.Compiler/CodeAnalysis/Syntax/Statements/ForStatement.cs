@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class ForStatement : StatementSyntax
+    public sealed class ForStatement : StatementSyntax
     {
         readonly SyntaxToken Forkeyword;
         readonly SyntaxToken Openparen;

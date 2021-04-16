@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
-    public class IfStatement : StatementSyntax
+    public sealed class IfStatement : StatementSyntax
     {
         readonly SyntaxToken Ifkeyword;
         readonly SyntaxToken Openparen;
