@@ -29,6 +29,7 @@
         ClosedBracketToken,
         SemicolonToken,
         VariableToken,
+        StringToken,
         
         // Keywords
         TrueKeyword,
