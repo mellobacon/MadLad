@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
 {
-    public class Lexer
+    public sealed class Lexer
     {
         private readonly SourceText Text;
         private int Start;
@@ -153,6 +153,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                 case '\r':
                     ReadWhiteSpaceToken();
                     break;
+                case '"':
+                    ReadStringToken();
+                    break;
                 default:
                     if (char.IsWhiteSpace(Current))
                     {
@@ -260,6 +263,30 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             if (Kind == SyntaxKind.TrueKeyword)
             {
                 Value = true;
+            }
+        }
+
+        private void ReadStringToken()
+        {
+            switch (Current)
+            {
+                case '"':
+                    Advance(1);
+                    while (char.IsLetter(Current))
+                    {
+                        Advance(1);
+                    }
+
+                    if (Current == '"')
+                    {
+                        Advance(1);
+                        var length = Position - Start;
+                        var text = Text.ToString(Start, length);
+                        Kind = SyntaxKind.StringToken;
+                        Value = text;
+                    }
+
+                    break;
             }
         }
         #endregion
