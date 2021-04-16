@@ -4,7 +4,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax
 {
-    public class SyntaxToken : SyntaxNode
+    public sealed class SyntaxToken : SyntaxNode
     {
         public readonly string Text;
         public override SyntaxKind Kind { get; }
