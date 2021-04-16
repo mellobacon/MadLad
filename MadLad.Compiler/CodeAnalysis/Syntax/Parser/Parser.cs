@@ -7,7 +7,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
 {
-    public class Parser
+    internal sealed class Parser
     {
         private readonly SourceText Text;
         private readonly ImmutableArray<SyntaxToken> Tokens;
@@ -184,23 +184,31 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            // check if token is a keyword or number or variable or start of a grouped expression
+            // check if token is a keyword or number or variable or start of a grouped expression or string
             // and return it
             switch (Current.Kind)
             {
+                // grouped expression
                 case SyntaxKind.OpenParenToken:
                     var left = NextToken();
                     var expression = ParseAssignmentExpression();
                     var right = MatchToken(SyntaxKind.CloseParenToken);
                     return new GroupedExpression(left, expression, right);
+                // bools
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                     var keywordToken = NextToken();
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpression(keywordToken, value);
+                // variables
                 case SyntaxKind.VariableToken:
                     var variable = NextToken();
                     return new NameExpression(variable);
+                // strings
+                case SyntaxKind.StringToken:
+                    var stringtoken = MatchToken(SyntaxKind.StringToken);
+                    return new LiteralExpression(stringtoken);
+                // default to reading a number
                 default:
                     var numbertoken = MatchToken(SyntaxKind.NumberToken);
                     return new LiteralExpression(numbertoken);
