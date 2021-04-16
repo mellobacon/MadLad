@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
 {
-    public class SourceText
+    public sealed class SourceText
     {
         private readonly string Text;
         public ImmutableArray<TextLine> Lines;
