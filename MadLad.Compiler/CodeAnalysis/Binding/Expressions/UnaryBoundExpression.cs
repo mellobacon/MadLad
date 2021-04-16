@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
-    public class UnaryBoundExpression : BoundExpression
+    internal sealed class UnaryBoundExpression : BoundExpression
     {
         public readonly UnaryBoundOperator Op;
         public readonly BoundExpression Operand;

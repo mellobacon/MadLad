@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
 {
-    public class BlockBoundStatement : BoundStatement
+    internal sealed class BlockBoundStatement : BoundStatement
     {
         public readonly ImmutableArray<BoundStatement> Statements;
 

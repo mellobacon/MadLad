@@ -4,7 +4,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public sealed class BoundScope
+    internal sealed class BoundScope
     {
         public readonly BoundScope Parent;
         private readonly Dictionary<string, Variable> variables = new();

@@ -1,4 +1,4 @@
 ﻿namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
 {
-    public abstract class BoundStatement : BoundNode { }
+    internal abstract class BoundStatement : BoundNode { }
 }

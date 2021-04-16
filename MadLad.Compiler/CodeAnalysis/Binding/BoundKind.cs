@@ -1,6 +1,6 @@
 ﻿namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public enum BoundKind
+    internal enum BoundKind
     {
         // Statements
         BlockStatement,

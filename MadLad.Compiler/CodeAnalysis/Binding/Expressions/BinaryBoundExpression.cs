@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
-    public class BinaryBoundExpression : BoundExpression
+    internal sealed class BinaryBoundExpression : BoundExpression
     {
         public readonly BoundExpression Left;
         public readonly BinaryBoundOperator Op;

@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
 {
-    public class BoundVariableDeclaration : BoundStatement
+    internal sealed class BoundVariableDeclaration : BoundStatement
     {
         public readonly Variable Variable;
         public readonly BoundExpression Expression;

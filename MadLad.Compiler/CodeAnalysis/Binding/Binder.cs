@@ -10,7 +10,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public class Binder
+    internal sealed class Binder
     {
         private BoundScope Scope;
         private readonly ErrorList ErrorList = new();

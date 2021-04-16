@@ -3,7 +3,7 @@
 namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
     // Returns the value of the literal expression
-    public class LiteralBoundExpression : BoundExpression
+    internal sealed class LiteralBoundExpression : BoundExpression
     {
         public readonly object Value;
 

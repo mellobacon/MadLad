@@ -3,7 +3,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public class UnaryBoundOperator
+    internal sealed class UnaryBoundOperator
     {
         private readonly SyntaxKind SyntaxKind;
         public readonly UnaryBoundOperatorKind Kind;

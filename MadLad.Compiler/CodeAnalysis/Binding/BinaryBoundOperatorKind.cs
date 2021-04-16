@@ -1,6 +1,6 @@
 ﻿namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public enum BinaryBoundOperatorKind
+    internal enum BinaryBoundOperatorKind
     {
         Addition,
         Subtraction,

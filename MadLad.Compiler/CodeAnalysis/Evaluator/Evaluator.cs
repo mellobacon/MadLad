@@ -8,7 +8,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
     // Evaluates the expressions
-    public class Evaluator
+    internal sealed class Evaluator
     {
         private readonly BoundStatement Root;
         private readonly Dictionary<Variable, object> Variables;

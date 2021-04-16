@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
 {
-    public class ForBoundStatement : BoundStatement
+    internal sealed class ForBoundStatement : BoundStatement
     {
         public readonly BoundStatement Initialization;
         public readonly BoundExpression Condition;

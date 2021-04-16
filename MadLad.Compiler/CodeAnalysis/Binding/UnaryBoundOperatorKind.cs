@@ -1,6 +1,6 @@
 ﻿namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public enum UnaryBoundOperatorKind
+    internal enum UnaryBoundOperatorKind
     {
         Identity,
         Negation,

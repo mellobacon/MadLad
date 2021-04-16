@@ -5,7 +5,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
-    public sealed class BoundGlobalScope
+    internal sealed class BoundGlobalScope
     {
         public readonly BoundGlobalScope Previous;
         public readonly ImmutableArray<Error> Errors;
