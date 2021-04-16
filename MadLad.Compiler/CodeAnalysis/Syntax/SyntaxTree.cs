@@ -5,7 +5,7 @@ using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax
 {
-    public class SyntaxTree
+    public sealed class SyntaxTree
     {
         public readonly ImmutableArray<Error> Errors;
         public readonly SourceText Text;
