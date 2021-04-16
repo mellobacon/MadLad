@@ -7,7 +7,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         public readonly string Name;
         public readonly Type Type;
         
-        public Variable(string name, Type type)
+        internal Variable(string name, Type type)
         {
             Name = name;
             Type = type;
