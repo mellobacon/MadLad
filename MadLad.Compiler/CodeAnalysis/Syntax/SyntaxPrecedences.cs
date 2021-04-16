@@ -41,13 +41,13 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         {
             return text switch
             {
-                "true" => SyntaxKind.TrueKeyword,
-                "false" => SyntaxKind.FalseKeyword,
-                "var" => SyntaxKind.VarKeyword,
-                "if" => SyntaxKind.IfKeyword,
-                "else" => SyntaxKind.ElseKeyword,
-                "while" => SyntaxKind.WhileKeyword,
-                "for" => SyntaxKind.ForKeyword,
+                "WHYAREYOUBOOINGMEIMRIGHT" => SyntaxKind.TrueKeyword, // true
+                "NO" => SyntaxKind.FalseKeyword, // false
+                "WHATEVER" => SyntaxKind.VarKeyword, // var
+                "BUTWHATFUCKINGIF" => SyntaxKind.IfKeyword, // if
+                "WHATTHEFUCKELSE" => SyntaxKind.ElseKeyword, //else
+                "DOTHETHING" => SyntaxKind.WhileKeyword, // while
+                "GOAROUNDPLS" => SyntaxKind.ForKeyword, // for
                 _ => SyntaxKind.VariableToken
             };
         }
@@ -99,13 +99,13 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.GreatEqualsToken => ">=",
                 SyntaxKind.OrPipeToken => "||",
                 SyntaxKind.AndAmpersandToken => "&&",
-                SyntaxKind.TrueKeyword => "true",
-                SyntaxKind.FalseKeyword => "false",
-                SyntaxKind.VarKeyword => "var",
-                SyntaxKind.IfKeyword => "if",
-                SyntaxKind.ElseKeyword => "else",
-                SyntaxKind.WhileKeyword => "while",
-                SyntaxKind.ForKeyword => "for",
+                SyntaxKind.TrueKeyword => "WHYAREYOUBOOINGMEIMRIGHT",
+                SyntaxKind.FalseKeyword => "NO",
+                SyntaxKind.VarKeyword => "WHATEVER",
+                SyntaxKind.IfKeyword => "BUTWHATFUCKINGIF",
+                SyntaxKind.ElseKeyword => "WHATTHEFUCKELSE",
+                SyntaxKind.WhileKeyword => "DOTHETHING",
+                SyntaxKind.ForKeyword => "GOAROUNDPLS",
                 _ => null
             };
         }
