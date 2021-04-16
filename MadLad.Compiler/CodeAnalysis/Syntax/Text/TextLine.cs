@@ -1,6 +1,6 @@
 ﻿namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
 {
-    public class TextLine
+    public sealed class TextLine
     {
         private readonly SourceText Text;
         public readonly int Start;
