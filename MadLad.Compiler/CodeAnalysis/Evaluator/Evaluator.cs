@@ -19,12 +19,14 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             Variables = variables;
         }
 
+        // evaluate the statement and return the value
         public object Evaluate()
         {
             EvaluateStatement(Root);
             return LastValue;
         }
 
+        // get each statement and evaluate ....this doesnt need a commment
         private void EvaluateStatement(BoundStatement root)
         {
             switch (root)
@@ -62,6 +64,10 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     {
                         EvaluateStatement(w.Statement);
                     }
+                    
+                    break;
+                case ForBoundStatement f:
+                    
                     break;
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
@@ -72,16 +78,18 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
         {
             switch (root)
             {
-                // Evaluate node
+                // Evaluate single value
                 case LiteralBoundExpression n:
                     return n.Value;
+                
                 // Evaluate binary expression
                 case BinaryBoundExpression b:
                 {
+                    // get the left and right operands / expressions
                     var left = EvaluateExpression(b.Left);
                     var right = EvaluateExpression(b.Right);
                 
-                    // if one of the numbers is an float convert both numbers to floats
+                    // if one of the numbers is an float calculate both numbers as floats
                     if (left is float || right is float)
                     {
                         return b.Op.BoundKind switch
@@ -100,6 +108,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                         };
                     }
 
+                    // calculate as ints
                     return b.Op.BoundKind switch
                     {
                         BinaryBoundOperatorKind.Addition => (int) left + (int) right,
@@ -119,10 +128,13 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                         _ => throw new Exception($"Unexpected binary operator {b.Op}")
                     };
                 }
+                
                 // Evaluate unary expression
                 case UnaryBoundExpression u:
                 {
+                    // get the operand / expression
                     var operand = EvaluateExpression(u.Operand);
+                    
                     switch (u.Op.Kind)
                     {
                         case UnaryBoundOperatorKind.Negation:
@@ -131,19 +143,28 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                                 return -(float)operand;
                             }
                             return -(int)operand;
+                        
                         case UnaryBoundOperatorKind.LogicalNegation:
                             return !(bool)operand;
                     }
                     throw new Exception($"Unexpected unnary operator {u.Op}");
                 }
+                
+                // Evaluate the assignment expression (x = 10)
                 case AssignmentBoundExpression a:
                 {
+                    // set the value
                     var value = EvaluateExpression(a.Expression);
+                    
+                    // set the variable equal to the value
                     Variables[a.Variable] = value;
                     return value;
                 }
+                
+                // Evaluate the variable expression (x)
                 case VariableBoundExpression v:
                 {
+                    // get the value of the variable
                     var value = Variables[v.Variable];
                     return value;
                 }
