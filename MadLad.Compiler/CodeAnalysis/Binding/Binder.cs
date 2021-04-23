@@ -20,6 +20,21 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         {
             Scope = new BoundScope(parent);
         }
+        
+        // get stuff from each scope and bind them
+        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnit syntax)
+        {
+            // get and bind the variables in the scope
+            var parentscope = CreateParentScopes(previous); 
+            var binder = new Binder(parentscope);
+            var variables = binder.Scope.GetDeclaredVariables();
+            
+            // bind the statements / expressions
+            var statement = binder.BindStatement(syntax.Expression);
+
+            var errors = binder.Errors.ToImmutableArray();
+            return new BoundGlobalScope(previous, errors, variables, statement);
+        }
 
         private BoundStatement BindStatement(StatementSyntax statement)
         {
@@ -32,6 +47,15 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
                 SyntaxKind.IfStatement => BindIfStatement((IfStatement)statement),
                 _ => throw new Exception($"Unexpected syntax {statement.Kind}")
             };
+        }
+
+        private BoundStatement BindForStatement(ForStatement syntax)
+        {
+            var init = BindStatement(syntax.Initializer);
+            var condition = BindStatement(syntax.Condition);
+            var iterator = BindExpression(syntax.Iterator);
+            var statement = BindStatement(syntax.Dostatement);
+            return new ForBoundStatement(init, condition, iterator, statement);
         }
 
         private BoundStatement BindWhileStatement(WhileStatement syntax)
@@ -181,16 +205,6 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             return new VariableBoundExpression(variable);
         }
         
-        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnit syntax)
-        {
-            var parentscope = CreateParentScopes(previous);
-            var binder = new Binder(parentscope);
-            var statement = binder.BindStatement(syntax.Expression);
-            var variables = binder.Scope.GetDeclaredVariables();
-            var errors = binder.Errors.ToImmutableArray();
-            return new BoundGlobalScope(previous, errors, variables, statement);
-        }
-
         private static BoundScope CreateParentScopes(BoundGlobalScope previous)
         {
             var stack = new Stack<BoundGlobalScope>();

@@ -15,9 +15,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
         public ErrorList Errors => ErrorList;
 
         private int Position;
-        private SyntaxToken Current => Peek(0);
+        private SyntaxToken Current => Peek(0); // Gets the current character
         
-        // Add each token in the input to a list of tokens
+        // Lex the text for the parser
         public Parser(SourceText text)
         {
             Text = text;
@@ -33,10 +33,11 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                 // If the token is valid, add it to the token list
                 if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind != SyntaxKind.BadToken)
                 {
-                    tokens.Add(token);
+                    tokens.Add(token); // Add each token in the input to a list of tokens
                 }
             } while (token.Kind != SyntaxKind.EOFToken);
             Tokens = tokens.ToImmutableArray();
+            
             ErrorList.AddRange(lexer.Errors); // add any errors while lexing to the error list
         }
 
@@ -82,6 +83,18 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             var elsekeyword = NextToken();
             var statement = ParseStatement();
             return new ElseStatement(elsekeyword, statement);
+        }
+
+        private ForStatement ParseForStatement()
+        {
+            var forkeyword = MatchToken(SyntaxKind.ForKeyword);
+            var openparen = MatchToken(SyntaxKind.OpenParenToken);
+            var init = ParseStatement();
+            var condition = ParseExpressionStatement();
+            var iterator = ParseBinaryExpression();
+            var closeparen = MatchToken(SyntaxKind.CloseParenToken);
+            var statement = ParseStatement();
+            return new ForStatement(forkeyword, openparen, init, condition, iterator, closeparen, statement);
         }
 
         private WhileStatement ParseWhileStatement()
