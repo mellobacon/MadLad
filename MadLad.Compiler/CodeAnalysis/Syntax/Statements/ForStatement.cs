@@ -5,22 +5,27 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
     public sealed class ForStatement : StatementSyntax
     {
-        readonly SyntaxToken Forkeyword;
-        readonly SyntaxToken Openparen;
-        public readonly StatementSyntax Initialization;
-        public readonly ExpressionStatement Condition;
-        public readonly ExpressionSyntax Iteration;
-        readonly SyntaxToken Closedparen;
-        public readonly StatementSyntax Dostatement;
-        
-        public ForStatement(SyntaxToken forkeyword, SyntaxToken openparen, StatementSyntax initialization, 
-            ExpressionStatement condition, ExpressionSyntax iteration, SyntaxToken closedparen, StatementSyntax dostatement)
+        public SyntaxToken Forkeyword;
+        public SyntaxToken Openparen;
+        public StatementSyntax Initializer;
+        public StatementSyntax Condition;
+        public ExpressionSyntax Iterator;
+        public SyntaxToken Closedparen;
+        public StatementSyntax Dostatement;
+
+
+        /**
+         * if (var x = 0; x < 1; x++) {}
+         */
+        public ForStatement(SyntaxToken forkeyword, SyntaxToken openparen, StatementSyntax initializer, 
+            StatementSyntax condition, ExpressionSyntax iterator, SyntaxToken closedparen, 
+            StatementSyntax dostatement)
         {
             Forkeyword = forkeyword;
             Openparen = openparen;
-            Initialization = initialization;
+            Initializer = initializer;
             Condition = condition;
-            Iteration = iteration;
+            Iterator = iterator;
             Closedparen = closedparen;
             Dostatement = dostatement;
         }
@@ -30,9 +35,9 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
         {
             yield return Forkeyword;
             yield return Openparen;
-            yield return Initialization;
+            yield return Initializer;
             yield return Condition;
-            yield return Iteration;
+            yield return Iterator;
             yield return Closedparen;
             yield return Dostatement;
         }
