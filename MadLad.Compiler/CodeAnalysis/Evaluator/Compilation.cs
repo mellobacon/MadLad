@@ -8,12 +8,14 @@ using MadLad.Compiler.CodeAnalysis.Syntax;
 
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
+    // gather all the inputs (or source files later on) and compile them
     public sealed class Compilation
     {
         readonly Compilation Previous;
         private readonly SyntaxTree SyntaxTree;
         private BoundGlobalScope _GlobalScope;
 
+        // set the constructor without exposing the previous compilation
         public Compilation(SyntaxTree syntaxtree) : this(null, syntaxtree) {}
 
         private Compilation(Compilation previous, SyntaxTree syntaxTree)
@@ -22,6 +24,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             SyntaxTree = syntaxTree;
         }
 
+        // gets the global scope
         private BoundGlobalScope GlobalScope
         {
             get
@@ -29,6 +32,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                 if (_GlobalScope == null)
                 {
                     var _globalScope = Binder.BindGlobalScope(Previous?.GlobalScope, SyntaxTree.Root);
+                    
                     // set the scope to whatever thing is first
                     Interlocked.CompareExchange(ref _GlobalScope, _globalScope, null);
                 }
@@ -37,6 +41,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             }
         }
 
+        // this is used to set any previous compilation
         public Compilation Continue(SyntaxTree tree)
         {
             return new (this, tree);
@@ -50,16 +55,17 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             // Get the errors from the syntax tree and from binding
             var Errors = SyntaxTree.Errors.Concat(globalScope.Errors).ToImmutableArray();
             
-            // Evaluate the expression
+            // Evaluate the code
             var evaluator = new Evaluator(globalScope.Statement, variables);
             var value = evaluator.Evaluate();
 
             if (Errors.Any())
             {
+                // return errors
                 return new EvaluationResult(Errors, null);
             }
 
-            // Return the value or errors if there are any
+            // Return the value
             return new EvaluationResult(ImmutableArray<Error>.Empty, value);
         }
     }

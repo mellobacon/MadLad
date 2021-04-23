@@ -6,6 +6,7 @@ namespace MadLad
     {
         private static void Main()
         {
+            // set and run the repl
             REPL repl = new REPL
             {
                 Prompt = "» ",

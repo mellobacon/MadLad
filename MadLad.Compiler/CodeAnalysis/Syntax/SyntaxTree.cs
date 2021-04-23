@@ -23,7 +23,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
 
         public static SyntaxTree Parse(string text)
         {
-            // Convert the text into sourcetext
+            // Convert the text into sourcetext. sourcetext allows line number computation
             var sourcetext = SourceText.From(text);
             return new SyntaxTree(sourcetext);
         }

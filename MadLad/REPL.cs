@@ -49,12 +49,15 @@ namespace MadLad
         public void Run()
         {
             defaultprompt = Prompt;
+            
             var variables = new Dictionary<Variable, object>();
             var textbuilder = new StringBuilder();
 
             Console.WriteLine("MadLad Compooler but its a REPL instead");
+            // start getting input
             while (true)
             {
+                // checks if single line
                 if (textbuilder.Length == 0)
                 {
                     if (IsColored)
@@ -68,6 +71,7 @@ namespace MadLad
                         Console.Write(Prompt);
                     }
                 }
+                // checks if multiline
                 else
                 {
                     if (IsColored)
@@ -84,24 +88,31 @@ namespace MadLad
                 
                 var input = Console.ReadLine();
                 var isblank = string.IsNullOrWhiteSpace(input);
-
+                
                 if (isblank && textbuilder.Length == 0)
                 {
-                    break;
+                    break; // exit the program
                 }
                 
+                // checks if input is a command
                 if (!isblank && input.StartsWith("#"))
                 {
                     ProcessCommand(input);
                 }
+                // process the input for the compiler
                 else
                 {
+                    // append /r/n to the end of the input
                     textbuilder.AppendLine(input);
                 
                     var text = textbuilder.ToString();
+                    
+                    // debug options for showing the lexer
                     if (showbasiclexer || showfullexer)
                     {
                         var Lexer = new Lexer(SourceText.From(text));
+                        
+                        // get every token in the input
                         while (true)
                         {
                             var errors = Lexer.Errors;
@@ -133,28 +144,38 @@ namespace MadLad
                     }
                     else
                     {
-                        // blah blah compiler stuff
+                        // parse the tree
                         var syntaxtree = SyntaxTree.Parse(text);
+                        
+                        // go back to the start to take input on another line
                         if (!isblank && syntaxtree.Errors.Any())
                         {
                             continue;
                         }
-                            
+                        
+                        // can show the syntax tree if needed
                         if (showtree)
                         {
                             ShowTree(syntaxtree.Root);   
                         }
-
-                        Compilation compilation;
-                        if (previous == null)
-                            compilation = new Compilation(syntaxtree);
-                        else
-                            compilation = previous.Continue(syntaxtree);
                         
+                        Compilation compilation;
+                        // if the input is a single line, compile it
+                        // else gather the multiline inputs and compile those together
+                        if (previous == null)
+                        {
+                            compilation = new Compilation(syntaxtree);
+                        }
+                        else
+                        {
+                            compilation = previous.Continue(syntaxtree);   
+                        }
+
+                        // evaluate input(s) and error(s)
                         var result = compilation.Evaluate(variables);
                         var errors = result.Errors;
 
-                        // if there are errors dont evaluate
+                        // print the result if there are no errors
                         if (!errors.Any())
                         {
                             if (IsColored)
@@ -171,15 +192,19 @@ namespace MadLad
                             previous = compilation;
                         }
 
+                        // if there are errors get the input where the error applies
+                        // and print them
                         var sourcetext = syntaxtree.Text;
                         
                         PrintErrors(errors, sourcetext);
+                        
+                        // clear the textbuilder for the next input
                         textbuilder.Clear();
                     }
                 }
             }
         }
-        #region
+        #region Commands and stuff
         private static bool showbasiclexer;
         private static bool showfullexer;
         private static bool showtree;

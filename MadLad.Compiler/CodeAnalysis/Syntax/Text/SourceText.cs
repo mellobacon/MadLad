@@ -90,6 +90,11 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Text
             return lower - 1;
         }
 
+        /// <summary>
+        /// Convert the text into sourcetext. sourcetext allows line number computation
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static SourceText From(string text)
         {
             return new(text);

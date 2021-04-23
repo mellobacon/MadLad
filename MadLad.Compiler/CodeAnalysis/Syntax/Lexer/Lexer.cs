@@ -10,12 +10,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
         private int Position;
         private SyntaxKind Kind;
         private object Value;
-        private char Current => Peek(0); // Sets the current character to whatever
-        private char NextToken => Peek(1); // Sets the next token after the current one to whatever
+        
+        private char Current => Peek(0); // Gets the current character
+        private char NextToken => Peek(1); // Peeks ahead to the next character
 
         private readonly ErrorList ErrorList = new();
         public ErrorList Errors => ErrorList;
 
+        // sets the text for the lexer to lex
         public Lexer(SourceText text)
         {
             Text = text;
@@ -173,17 +175,21 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     break;
             }
 
+            // get the text set in the precedences class
+            // else set the text based on the length
             var text = SyntaxPrecedences.GetText(Kind);
             var length = Position - Start;
             if (text == null)
             {
                 text = Text.ToString(Start, length);
             }
+            
             return new SyntaxToken(text, Kind, Value, Start);
         }
         
         #region Operations for lexing
 
+        // set the position based on i
         private void Advance(int i)
         {
             Position += i;
