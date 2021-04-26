@@ -8,7 +8,8 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
         public SyntaxToken Forkeyword;
         public SyntaxToken Openparen;
         public StatementSyntax Initializer;
-        public StatementSyntax Condition;
+        public ExpressionSyntax Condition;
+        public SyntaxToken Semicolon;
         public ExpressionSyntax Iterator;
         public SyntaxToken Closedparen;
         public StatementSyntax Dostatement;
@@ -18,13 +19,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
          * if (var x = 0; x < 1; x++) {}
          */
         public ForStatement(SyntaxToken forkeyword, SyntaxToken openparen, StatementSyntax initializer, 
-            StatementSyntax condition, ExpressionSyntax iterator, SyntaxToken closedparen, 
+            ExpressionSyntax condition, SyntaxToken semicolon, ExpressionSyntax iterator, SyntaxToken closedparen, 
             StatementSyntax dostatement)
         {
             Forkeyword = forkeyword;
             Openparen = openparen;
             Initializer = initializer;
             Condition = condition;
+            Semicolon = semicolon;
             Iterator = iterator;
             Closedparen = closedparen;
             Dostatement = dostatement;
@@ -37,6 +39,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
             yield return Openparen;
             yield return Initializer;
             yield return Condition;
+            yield return Semicolon;
             yield return Iterator;
             yield return Closedparen;
             yield return Dostatement;

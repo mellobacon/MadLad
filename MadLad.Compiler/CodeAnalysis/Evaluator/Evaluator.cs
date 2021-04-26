@@ -67,7 +67,13 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     
                     break;
                 case ForBoundStatement f:
-                    
+                    EvaluateStatement(f.Initialization);
+                    var forcondition = (bool)EvaluateExpression(f.Condition);
+                    while (forcondition)
+                    {
+                        EvaluateStatement(f.Statement);
+                        EvaluateExpression(f.Iteration);
+                    }
                     break;
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");

@@ -5,14 +5,14 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
     internal sealed class ForBoundStatement : BoundStatement
     {
         public readonly BoundStatement Initialization;
-        public readonly BoundStatement Condition;
+        public readonly BoundExpression Condition;
         public readonly BoundExpression Iteration;
         public readonly BoundStatement Statement;
 
         /**
          * if (var x = 0; x < 1; x++) {}
          */
-        public ForBoundStatement(BoundStatement initialization, BoundStatement condition, BoundExpression iteration, BoundStatement statement)
+        public ForBoundStatement(BoundStatement initialization, BoundExpression condition, BoundExpression iteration, BoundStatement statement)
         {
             Initialization = initialization;
             Condition = condition;

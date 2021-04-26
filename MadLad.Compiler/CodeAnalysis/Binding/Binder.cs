@@ -45,6 +45,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
                 SyntaxKind.VariableDeclaration => BindVariableDeclaration((VariableDeclaration)statement),
                 SyntaxKind.WhileStatement => BindWhileStatement((WhileStatement)statement),
                 SyntaxKind.IfStatement => BindIfStatement((IfStatement)statement),
+                SyntaxKind.ForStatement => BindForStatement((ForStatement)statement),
                 _ => throw new Exception($"Unexpected syntax {statement.Kind}")
             };
         }
@@ -52,7 +53,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         private BoundStatement BindForStatement(ForStatement syntax)
         {
             var init = BindStatement(syntax.Initializer);
-            var condition = BindStatement(syntax.Condition);
+            var condition = BindExpression(syntax.Condition);
             var iterator = BindExpression(syntax.Iterator);
             var statement = BindStatement(syntax.Dostatement);
             return new ForBoundStatement(init, condition, iterator, statement);

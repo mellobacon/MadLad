@@ -58,6 +58,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                 SyntaxKind.VarKeyword => ParseVariableDeclaration(),
                 SyntaxKind.IfKeyword => ParseIfStatement(),
                 SyntaxKind.WhileKeyword => ParseWhileStatement(),
+                SyntaxKind.ForKeyword => ParseForStatement(),
                 _ => ParseExpressionStatement()
             };
         }
@@ -90,11 +91,12 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             var forkeyword = MatchToken(SyntaxKind.ForKeyword);
             var openparen = MatchToken(SyntaxKind.OpenParenToken);
             var init = ParseStatement();
-            var condition = ParseExpressionStatement();
+            var condition = ParseAssignmentExpression();
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
             var iterator = ParseBinaryExpression();
             var closeparen = MatchToken(SyntaxKind.CloseParenToken);
             var statement = ParseStatement();
-            return new ForStatement(forkeyword, openparen, init, condition, iterator, closeparen, statement);
+            return new ForStatement(forkeyword, openparen, init, condition, semicolon, iterator, closeparen, statement);
         }
 
         private WhileStatement ParseWhileStatement()
