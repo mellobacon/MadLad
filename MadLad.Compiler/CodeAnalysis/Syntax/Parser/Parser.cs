@@ -93,7 +93,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             var init = ParseStatement();
             var condition = ParseAssignmentExpression();
             var semicolon = MatchToken(SyntaxKind.SemicolonToken);
-            var iterator = ParseBinaryExpression();
+            var iterator = ParseAssignmentExpression();
             var closeparen = MatchToken(SyntaxKind.CloseParenToken);
             var statement = ParseStatement();
             return new ForStatement(forkeyword, openparen, init, condition, semicolon, iterator, closeparen, statement);

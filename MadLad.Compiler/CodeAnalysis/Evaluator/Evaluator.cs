@@ -59,8 +59,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     
                     break;
                 case WhileBoundStatement w:
-                    var whilecondition = (bool)EvaluateExpression(w.Condition);
-                    while (whilecondition)
+                    while ((bool)EvaluateExpression(w.Condition))
                     {
                         EvaluateStatement(w.Statement);
                     }
@@ -68,8 +67,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     break;
                 case ForBoundStatement f:
                     EvaluateStatement(f.Initialization);
-                    var forcondition = (bool)EvaluateExpression(f.Condition);
-                    while (forcondition)
+                    while ((bool)EvaluateExpression(f.Condition))
                     {
                         EvaluateStatement(f.Statement);
                         EvaluateExpression(f.Iteration);
