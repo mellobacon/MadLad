@@ -37,6 +37,12 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
             new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, typeof(int)),
             new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, typeof(float)),
+            
+            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, typeof(int)),
+            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, typeof(float)),
+            
+            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, typeof(int)),
+            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, typeof(float)),
 
             new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int)),
             new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float)),

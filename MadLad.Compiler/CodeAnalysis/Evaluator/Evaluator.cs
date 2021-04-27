@@ -102,6 +102,8 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                             BinaryBoundOperatorKind.Subtraction => Convert.ToSingle(left) - Convert.ToSingle(right),
                             BinaryBoundOperatorKind.Multiplication => Convert.ToSingle(left) * Convert.ToSingle(right),
                             BinaryBoundOperatorKind.Division => Convert.ToSingle(left) / Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.Modulo => Convert.ToSingle(left) % Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.Pow => Math.Pow(Convert.ToSingle(left), Convert.ToSingle(right)),
                             BinaryBoundOperatorKind.Equals => Equals(left, right),
                             BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
                             BinaryBoundOperatorKind.LessThan => Convert.ToSingle(left) < Convert.ToSingle(right),
@@ -119,8 +121,10 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                         BinaryBoundOperatorKind.Subtraction => (int) left - (int) right,
                         BinaryBoundOperatorKind.Multiplication => (int) left * (int) right,
                         BinaryBoundOperatorKind.Division =>
-                            Convert.ToSingle(left) / Convert.ToSingle(right) //except this one. this stays floaty
+                            Convert.ToSingle(left) / Convert.ToSingle(right) // except this one. this stays floaty
                         ,
+                        BinaryBoundOperatorKind.Modulo => (int)left % (int)right,
+                        BinaryBoundOperatorKind.Pow => Math.Pow((int)left, (int)right),
                         BinaryBoundOperatorKind.Equals => Equals(left, right),
                         BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
                         BinaryBoundOperatorKind.LogicalAnd => (bool)left && (bool)right,

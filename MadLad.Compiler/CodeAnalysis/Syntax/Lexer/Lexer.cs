@@ -72,8 +72,16 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     Advance(1);
                     break;
                 case '*':
-                    Kind = SyntaxKind.StarToken;
-                    Advance(1);
+                    if (NextToken == '*')
+                    {
+                        Kind = SyntaxKind.StarStarToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.StarToken;
+                        Advance(1);
+                    }
                     break;
                 case '/':
                     Kind = SyntaxKind.SlashToken;
@@ -122,6 +130,10 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                         Advance(1);
                     }
 
+                    break;
+                case '%':
+                    Kind = SyntaxKind.ModuloToken;
+                    Advance(1);
                     break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;

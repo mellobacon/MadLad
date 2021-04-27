@@ -106,6 +106,8 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.ElseKeyword => "WHATTHEFUCKELSE",
                 SyntaxKind.WhileKeyword => "DOTHETHING",
                 SyntaxKind.ForKeyword => "GOAROUNDPLS",
+                SyntaxKind.ModuloToken => "%",
+                SyntaxKind.StarStarToken => "**",
                 _ => null
             };
         }

@@ -30,6 +30,8 @@
         SemicolonToken,
         VariableToken,
         StringToken,
+        ModuloToken,
+        StarStarToken,
         
         // Keywords
         TrueKeyword,

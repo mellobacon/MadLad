@@ -13,6 +13,8 @@
         LessThan,
         GreaterThan,
         LessOrEqual,
-        GreaterOrEqual
+        GreaterOrEqual,
+        Modulo,
+        Pow
     }
 }
