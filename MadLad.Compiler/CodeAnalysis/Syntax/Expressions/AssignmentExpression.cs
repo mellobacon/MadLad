@@ -5,7 +5,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Expressions
     public sealed class AssignmentExpression : ExpressionSyntax
     {
         public readonly SyntaxToken Compoundoperator;
-        public bool Iscompound;
+        public readonly bool Iscompound;
         public readonly SyntaxToken VariableToken;
         private readonly SyntaxToken EqualsToken;
         public readonly ExpressionSyntax Expression;

@@ -5,14 +5,14 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
     public sealed class ForStatement : StatementSyntax
     {
-        public SyntaxToken Forkeyword;
-        public SyntaxToken Openparen;
-        public StatementSyntax Initializer;
-        public ExpressionSyntax Condition;
-        public SyntaxToken Semicolon;
-        public ExpressionSyntax Iterator;
-        public SyntaxToken Closedparen;
-        public StatementSyntax Dostatement;
+        private readonly SyntaxToken Forkeyword;
+        private readonly SyntaxToken Openparen;
+        public readonly StatementSyntax Initializer;
+        public readonly ExpressionSyntax Condition;
+        private readonly SyntaxToken Semicolon;
+        public readonly ExpressionSyntax Iterator;
+        private readonly SyntaxToken Closedparen;
+        public readonly StatementSyntax Dostatement;
 
 
         /**

@@ -5,7 +5,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
     internal sealed class AssignmentBoundExpression : BoundExpression
     {
-        public bool Iscompoundoperator;
+        public readonly bool Iscompoundoperator;
         public readonly Variable Variable;
         public readonly BoundExpression Expression;
         public readonly SyntaxToken Compoundoperator;

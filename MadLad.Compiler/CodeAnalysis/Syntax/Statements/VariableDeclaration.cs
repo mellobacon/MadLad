@@ -5,11 +5,11 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
 {
     public sealed class VariableDeclaration : StatementSyntax
     {
-        public readonly SyntaxToken Declarationkeyword;
+        private readonly SyntaxToken Declarationkeyword;
         public readonly SyntaxToken Variable;
-        public new readonly SyntaxToken Equals;
+        private new readonly SyntaxToken Equals;
         public readonly ExpressionSyntax Expression;
-        readonly SyntaxToken Semicolon;
+        private readonly SyntaxToken Semicolon;
 
         // var x = 10;
         public VariableDeclaration(SyntaxToken declarationkeyword, SyntaxToken variable, SyntaxToken equals,
