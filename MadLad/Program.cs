@@ -6,6 +6,7 @@ namespace MadLad
     {
         private static void Main()
         {
+            // TODO: Fix casing for delegates, properties, and fields
             // set and run the repl
             REPL repl = new REPL
             {
