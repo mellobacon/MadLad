@@ -1,4 +1,4 @@
-# MadLad
+<h1 align="center">MadLad</h1>
 
 <h1 align="center"><img src="https://user-images.githubusercontent.com/42365887/116343664-8013eb00-a7aa-11eb-8c8f-8e73d2aca68a.png"></h1>
 
