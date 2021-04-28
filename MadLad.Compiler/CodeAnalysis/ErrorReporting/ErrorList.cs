@@ -24,6 +24,7 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             var error = new Error(span, message);
             Errors.Add(error);
         }
+        
         public void ReportBadCharacter(int position, char character)
         {
             var message = $"Error: Illegal character: '{character}'";
@@ -67,10 +68,10 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             Report(span, message);
         }
 
-        public void ReportCannotConvertType(TextSpan span, Type from, Type to)
+        public void ReportCannotConvertType(Type from, Type to)
         {
             var message = $"Cannont convert type '{from}' to type '{to}'";
-            Report(span, message);
+            Report(new TextSpan(), message);
         }
     }
 }
