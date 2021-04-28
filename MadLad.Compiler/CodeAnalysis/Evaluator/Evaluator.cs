@@ -42,8 +42,10 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     LastValue = EvaluateExpression(e.Expression);
                     break;
                 case BoundVariableDeclaration v:
+                    // get the value and assign the variable to it
                     var value = EvaluateExpression(v.Expression);
                     Variables[v.Variable] = value;
+                    
                     LastValue = value;
                     break;
                 case IfBoundStatement f:
@@ -98,18 +100,18 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     {
                         return b.Op.BoundKind switch
                         {
-                            BinaryBoundOperatorKind.Addition => Convert.ToSingle(left) + Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.Subtraction => Convert.ToSingle(left) - Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.Multiplication => Convert.ToSingle(left) * Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.Division => Convert.ToSingle(left) / Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.Modulo => Convert.ToSingle(left) % Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.Pow => Math.Pow(Convert.ToSingle(left), Convert.ToSingle(right)),
+                            BinaryBoundOperatorKind.Addition => (float) left + (float) right,
+                            BinaryBoundOperatorKind.Subtraction => (float) left - (float) right,
+                            BinaryBoundOperatorKind.Multiplication => (float) left * (float) right,
+                            BinaryBoundOperatorKind.Division => (float)left / (float)right,
+                            BinaryBoundOperatorKind.Modulo => (float)left % (float)right,
+                            BinaryBoundOperatorKind.Pow => Math.Pow((float)left, (float)right),
                             BinaryBoundOperatorKind.Equals => Equals(left, right),
                             BinaryBoundOperatorKind.NotEquals => !Equals(left, right),
-                            BinaryBoundOperatorKind.LessThan => Convert.ToSingle(left) < Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.GreaterThan => Convert.ToSingle(left) > Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.LessOrEqual => Convert.ToSingle(left) <= Convert.ToSingle(right),
-                            BinaryBoundOperatorKind.GreaterOrEqual => Convert.ToSingle(left) >= Convert.ToSingle(right),
+                            BinaryBoundOperatorKind.LessThan => (float) left < (float) right,
+                            BinaryBoundOperatorKind.GreaterThan => (float) left > (float) right,
+                            BinaryBoundOperatorKind.LessOrEqual => (float) left <= (float) right,
+                            BinaryBoundOperatorKind.GreaterOrEqual => (float)left >= (float)right,
                             _ => throw new Exception($"Unexpected binary operator {b.Op}")
                         };
                     }
@@ -170,8 +172,13 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                         return a.Compoundoperator.Kind switch
                         {
                             SyntaxKind.PlusEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] + (int)value,
+                            SyntaxKind.MinusEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] - (int)value,
+                            SyntaxKind.SlashEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] / (int)value,
+                            SyntaxKind.StarEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] * (int)value,
+                            SyntaxKind.ModuloEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] % (int)value,
                         };
                     }
+                    
                     // set the variable equal to the value
                     Variables[a.Variable] = value;
                     
