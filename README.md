@@ -44,20 +44,20 @@ MadLad's syntax is meant to be angry. It is mad after all. Common C# syntax has 
 
 `#help`: to show the supported commands.
 
-`#DEBUG`: to go into debug mode. Debug commands will become useable in this mode.
+`#DEBUG`: to go into debug mode. Debug commands will become useable in this mode. To exit debug mode, just type this command again.
 
 `#clear`: clears the screen.
 
 `#exit`: exit the REPL.
 
-*The following commands only work in DEBUG mode only*
+*The following commands work in DEBUG mode only*
 
 `#showtree`: shows the syntax tree representing what is going on under the hood.
 
-`#showlexer --basic`: shows the basic lexer. There will be no evaluation output. Just the lexed tokens.
+`#showlexer --basic`: shows the basic lexer. There will be no evaluation output. Just the lexed tokens with minimal info. Only shows tokens you can see.
 
 `#showlexer --full`: shows the full lexer. Unlike the basic lexer, this lexer shows all tokens. Whitespace, EOF tokens, all of them - plus the details of what makes up the token.
 
-`#reset`: resets the scope so that all variables are removed. You can start with fresh global variables
+`#reset`: resets the scope so that all variables are removed from the stack. You can start with fresh global variables.
 
 <h3 align="center">This repository is a part of the <b><a href="https://github.com/salty-sweet/TLoDLiBSsf">The List of Developing Languages in Brackeys Server so far.</a> Check it out for some other awesome languages</h4
