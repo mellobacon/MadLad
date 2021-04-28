@@ -25,6 +25,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.SlashToken => 5,
                 SyntaxKind.PlusToken => 4,
                 SyntaxKind.MinusToken => 4,
+                SyntaxKind.ModuloToken => 4,
                 SyntaxKind.EqualsEqualsToken => 3,
                 SyntaxKind.NotEqualsToken => 3,
                 SyntaxKind.LessThanToken => 3,
@@ -41,7 +42,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         {
             return text switch
             {
-                "WHYAREYOUBOOINGMEIMRIGHT" => SyntaxKind.TrueKeyword, // true
+                "FINE" => SyntaxKind.TrueKeyword, // true
                 "NO" => SyntaxKind.FalseKeyword, // false
                 "WHATEVER" => SyntaxKind.VarKeyword, // var
                 "BUTWHATFUCKINGIF" => SyntaxKind.IfKeyword, // if
@@ -99,7 +100,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.GreatEqualsToken => ">=",
                 SyntaxKind.OrPipeToken => "||",
                 SyntaxKind.AndAmpersandToken => "&&",
-                SyntaxKind.TrueKeyword => "WHYAREYOUBOOINGMEIMRIGHT",
+                SyntaxKind.TrueKeyword => "FINE",
                 SyntaxKind.FalseKeyword => "NO",
                 SyntaxKind.VarKeyword => "WHATEVER",
                 SyntaxKind.IfKeyword => "BUTWHATFUCKINGIF",
@@ -109,6 +110,10 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.ModuloToken => "%",
                 SyntaxKind.StarStarToken => "**",
                 SyntaxKind.PlusEqualsToken => "+=",
+                SyntaxKind.MinusEqualsToken => "-=",
+                SyntaxKind.SlashEqualsToken => "/=",
+                SyntaxKind.StarEqualsToken => "*=",
+                SyntaxKind.ModuloEqualsToken => "%=",
                 _ => null
             };
         }
@@ -117,7 +122,12 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         {
             return token.Kind switch
             {
-                SyntaxKind.PlusEqualsToken => true,
+                SyntaxKind.PlusEqualsToken or
+                SyntaxKind.MinusToken or
+                SyntaxKind.SlashEqualsToken or
+                SyntaxKind.StarEqualsToken or
+                SyntaxKind.ModuloEqualsToken
+                => true,
                 _ => false
             };
         }
@@ -126,7 +136,11 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         {
             return token.Kind switch
             {
-                SyntaxKind.PlusEqualsToken => new(token.Text, SyntaxKind.PlusToken, token.Value, token.Position),
+                SyntaxKind.PlusEqualsToken => new SyntaxToken(token.Text, SyntaxKind.PlusToken, token.Value, token.Position),
+                SyntaxKind.MinusEqualsToken => new SyntaxToken(token.Text, SyntaxKind.MinusToken, token.Value, token.Position),
+                SyntaxKind.SlashEqualsToken => new SyntaxToken(token.Text, SyntaxKind.SlashToken, token.Value, token.Position),
+                SyntaxKind.StarEqualsToken => new SyntaxToken(token.Text, SyntaxKind.StarToken, token.Value, token.Position),
+                SyntaxKind.ModuloEqualsToken => new SyntaxToken(token.Text, SyntaxKind.ModuloToken, token.Value, token.Position),
                 _ => token
             };
         }

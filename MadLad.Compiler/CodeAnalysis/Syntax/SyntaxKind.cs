@@ -33,6 +33,10 @@
         ModuloToken,
         StarStarToken,
         PlusEqualsToken,
+        MinusEqualsToken,
+        SlashEqualsToken,
+        StarEqualsToken,
+        ModuloEqualsToken,
 
         // Keywords
         TrueKeyword,

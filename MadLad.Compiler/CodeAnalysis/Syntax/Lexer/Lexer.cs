@@ -76,11 +76,24 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     }
                     break;
                 case '-':
-                    Kind = SyntaxKind.MinusToken;
-                    Advance(1);
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.MinusEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.MinusToken;
+                        Advance(1);
+                    }
                     break;
                 case '*':
-                    if (NextToken == '*')
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.StarEqualsToken;
+                        Advance(2);
+                    }
+                    else if (NextToken == '*')
                     {
                         Kind = SyntaxKind.StarStarToken;
                         Advance(2);
@@ -92,8 +105,16 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     }
                     break;
                 case '/':
-                    Kind = SyntaxKind.SlashToken;
-                    Advance(1);
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.SlashEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.SlashToken;
+                        Advance(1);
+                    }
                     break;
                 case '&':
                     if (NextToken == '&')
@@ -140,8 +161,16 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
 
                     break;
                 case '%':
-                    Kind = SyntaxKind.ModuloToken;
-                    Advance(1);
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.ModuloEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.ModuloToken;
+                        Advance(1);
+                    }
                     break;
                 case '(':
                     Kind = SyntaxKind.OpenParenToken;
