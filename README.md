@@ -1,6 +1,6 @@
 <h1 align="center">MadLad</h1>
 
-<h1 align="center"><img src="https://user-images.githubusercontent.com/42365887/116343664-8013eb00-a7aa-11eb-8c8f-8e73d2aca68a.png"></h1>
+<h1 align="center"><img src="https://user-images.githubusercontent.com/42365887/116343952-0fb99980-a7ab-11eb-9263-2f188b61d475.png"></h1>
 
 <h1 align="center"> <img src="https://forthebadge.com/images/badges/made-with-c-sharp.svg"> <img src="https://forthebadge.com/images/badges/you-didnt-ask-for-this.svg"></h1>
 
