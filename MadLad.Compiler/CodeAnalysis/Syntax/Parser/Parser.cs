@@ -193,7 +193,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             {
                 var precedence = Current.Kind.GetBinaryOperatorPrecedence();
                 
-                if (precedence.Equals(0) || precedence <= parentprecedence)
+                if (precedence == 0 || precedence <= parentprecedence)
                 {
                     break;
                 }
