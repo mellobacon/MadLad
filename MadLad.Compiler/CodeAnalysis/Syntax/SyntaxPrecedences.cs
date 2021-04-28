@@ -108,7 +108,26 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
                 SyntaxKind.ForKeyword => "GOAROUNDPLS",
                 SyntaxKind.ModuloToken => "%",
                 SyntaxKind.StarStarToken => "**",
+                SyntaxKind.PlusEqualsToken => "+=",
                 _ => null
+            };
+        }
+
+        public static bool GetCompoundOperator(SyntaxToken token)
+        {
+            return token.Kind switch
+            {
+                SyntaxKind.PlusEqualsToken => true,
+                _ => false
+            };
+        }
+
+        public static SyntaxToken GetSoloOperator(SyntaxToken token)
+        {
+            return token.Kind switch
+            {
+                SyntaxKind.PlusEqualsToken => new(token.Text, SyntaxKind.PlusToken, token.Value, token.Position),
+                _ => token
             };
         }
     }

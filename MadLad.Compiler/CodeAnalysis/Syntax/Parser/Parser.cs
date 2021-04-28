@@ -16,7 +16,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
 
         private int Position;
         private SyntaxToken Current => Peek(0); // Gets the current character
-        
+
         // Lex the text for the parser
         public Parser(SourceText text)
         {
@@ -159,6 +159,15 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
                 return new AssignmentExpression(identifierToken, operatorToken, right);
+            }
+
+            if (Current.Kind == SyntaxKind.VariableToken && SyntaxPrecedences.GetCompoundOperator(Peek(1)))
+            {
+                // parse as compound operator assignment
+                var identifierToken = NextToken();
+                var compoundOperatorToken = NextToken();
+                var right = ParseBinaryExpression();
+                return new AssignmentExpression(identifierToken, SyntaxPrecedences.GetSoloOperator(Peek(1)), right, compoundOperatorToken, true);
             }
             return ParseBinaryExpression();
         }

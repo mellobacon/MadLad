@@ -172,22 +172,26 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
         private BoundExpression BindAssignmentExpression(AssignmentExpression syntax)
         {
+            // get variable name
             var name = syntax.VariableToken.Text;
+            // get the expression the variable is equal to
             var expression = BindExpression(syntax.Expression);
 
+            // check to make sure the variable doesnt exist
             if (!Scope.TryLookup(name, out var variable))
             {
                 ErrorList.ReportUndefinedName(syntax.VariableToken.Span, name);
                 return expression;
             }
 
+            // check to make sure the variable cant be reassigned as another type
             if (expression.Type != variable.Type)
             {
-                //ErrorList.ReportCannotConvertType(syntax.Expression, expression.Type, variable.Type);
+                ErrorList.ReportCannotConvertType(expression.Type, variable.Type); // temp fix
                 return expression;
             }
 
-            return new AssignmentBoundExpression(variable, expression);
+            return new AssignmentBoundExpression(variable, expression, syntax.Compoundoperator, syntax.Iscompound);
         }
 
         private BoundExpression BindNameExpression(NameExpression syntax)

@@ -32,7 +32,8 @@
         StringToken,
         ModuloToken,
         StarStarToken,
-        
+        PlusEqualsToken,
+
         // Keywords
         TrueKeyword,
         FalseKeyword,

@@ -26,7 +26,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             return LastValue;
         }
 
-        // get each statement and evaluate ....this doesnt need a commment
+        // get each statement and evaluate
         private void EvaluateStatement(BoundStatement root)
         {
             switch (root)
@@ -163,9 +163,18 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                 {
                     // set the value
                     var value = EvaluateExpression(a.Expression);
-                    
+
+                    // if the expression is a compound operator (x += 10)
+                    if (a.Iscompoundoperator)
+                    {
+                        return a.Compoundoperator.Kind switch
+                        {
+                            SyntaxKind.PlusEqualsToken => Variables[a.Variable] = (int) Variables[a.Variable] + (int)value,
+                        };
+                    }
                     // set the variable equal to the value
                     Variables[a.Variable] = value;
+                    
                     return value;
                 }
                 

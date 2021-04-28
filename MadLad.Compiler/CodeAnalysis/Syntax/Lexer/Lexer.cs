@@ -64,8 +64,16 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
                     }
                     break;
                 case '+':
-                    Kind = SyntaxKind.PlusToken;
-                    Advance(1);
+                    if (NextToken == '=')
+                    {
+                        Kind = SyntaxKind.PlusEqualsToken;
+                        Advance(2);
+                    }
+                    else
+                    {
+                        Kind = SyntaxKind.PlusToken;
+                        Advance(1);
+                    }
                     break;
                 case '-':
                     Kind = SyntaxKind.MinusToken;
