@@ -1,7 +1,7 @@
 <h1 align="center">MadLad</h1>
 
 <p align="center"><img src="https://user-images.githubusercontent.com/42365887/116344002-265ff080-a7ab-11eb-8254-b496ec349a00.png"></p>
-
+<h6 align="center"> Inspired by <a src="https://esolangs.org/wiki/Aggressthon">Aggressthon</a> </h6>
 <h1 align="center"> <img src="https://forthebadge.com/images/badges/made-with-c-sharp.svg"> <img src="https://forthebadge.com/images/badges/you-didnt-ask-for-this.svg"></h1>
 
 MadLad is an esolang meant to be similar to C# but with a twist. MadLad is a very angry language and will yell at you for everything. Featuring screaming syntax and unhelpful   error messages, this language hates everything and will express it with rage.
