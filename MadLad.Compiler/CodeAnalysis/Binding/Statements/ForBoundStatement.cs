@@ -8,10 +8,7 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
         public readonly BoundExpression Condition;
         public readonly BoundExpression Iteration;
         public readonly BoundStatement Statement;
-
-        /**
-         * if (var x = 0; x < 1; x++) {}
-         */
+        
         public ForBoundStatement(BoundStatement initialization, BoundExpression condition, BoundExpression iteration, BoundStatement statement)
         {
             Initialization = initialization;

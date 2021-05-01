@@ -13,11 +13,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Statements
         public readonly ExpressionSyntax Iterator;
         private readonly SyntaxToken Closedparen;
         public readonly StatementSyntax Dostatement;
-
-
-        /**
-         * if (var x = 0; x < 1; x++) {}
-         */
+        
         public ForStatement(SyntaxToken forkeyword, SyntaxToken openparen, StatementSyntax initializer, 
             ExpressionSyntax condition, SyntaxToken semicolon, ExpressionSyntax iterator, SyntaxToken closedparen, 
             StatementSyntax dostatement)
