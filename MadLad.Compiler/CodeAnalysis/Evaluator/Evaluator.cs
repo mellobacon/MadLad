@@ -48,6 +48,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     Variables[v.Variable] = value;
                     
                     LastValue = value;
+                    
                     break;
                 case IfBoundStatement f:
                     var condition = (bool)EvaluateExpression(f.Conditiion);
@@ -62,14 +63,17 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     
                     break;
                 case WhileBoundStatement w:
+                    // we make sure the condition can be evaluated as a bool. if not we just dont
+                    // return the statement
                     try
                     {
-                        var c = (bool)EvaluateExpression(w.Condition);
+                        var _ = (bool)EvaluateExpression(w.Condition);
                     }
-                    catch (Exception e)
+                    catch (Exception )
                     {
                         break;
                     }
+                    
                     while ((bool)EvaluateExpression(w.Condition))
                     {
                         EvaluateStatement(w.Statement);
@@ -79,11 +83,13 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                 case ForBoundStatement f:
                     EvaluateStatement(f.Initialization);
                     
+                    // we make sure the condition can be evaluated as a bool. if not we just dont
+                    // return the statement
                     try
                     {
-                        var c = (bool)EvaluateExpression(f.Condition);
+                        var _ = (bool)EvaluateExpression(f.Condition);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         break;
                     }
