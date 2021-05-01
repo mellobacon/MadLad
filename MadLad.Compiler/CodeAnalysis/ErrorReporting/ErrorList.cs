@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
@@ -38,19 +39,19 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             Report(span, message);
         }
 
-        public void ReportInvalidNumber(TextSpan span, string text, Type type)
+        public void ReportInvalidNumber(TextSpan span, string text, TypeSymbol type)
         {
             var message = $"The number {text} is not a valid {type}";
             Report(span, message);
         }
 
-        public void ReportUndefinedBinaryOperator(TextSpan span, string op, Type left, Type right)
+        public void ReportUndefinedBinaryOperator(TextSpan span, string op, TypeSymbol left, TypeSymbol right)
         {
             var message = $"Binary operator '{op}' is not defined for the types {left} and {right}";
             Report(span, message);
         }
 
-        public void ReportUndefinedUnaryOperator(TextSpan span, string op, Type operand)
+        public void ReportUndefinedUnaryOperator(TextSpan span, string op, TypeSymbol operand)
         {
             var message = $"Unary operator '{op}' is not defined for the type {operand}";
             Report(span, message);
@@ -68,9 +69,9 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             Report(span, message);
         }
 
-        public void ReportCannotConvertType(Type from, Type to)
+        public void ReportCannotConvertType(TypeSymbol from, TypeSymbol to)
         {
-            var message = $"Cannont convert type '{from}' to type '{to}'";
+            var message = $"Cannot convert type '{from}' to type '{to}'";
             Report(new TextSpan(), message);
         }
     }
