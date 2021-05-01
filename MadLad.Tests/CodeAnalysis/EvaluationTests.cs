@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MadLad.Compiler.CodeAnalysis.Evaluator;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 using Xunit;
 
 namespace MadLad.Tests.CodeAnalysis
@@ -37,7 +38,7 @@ namespace MadLad.Tests.CodeAnalysis
         {
             var syntaxTree = SyntaxTree.Parse(text);
             var compilation = new Compilation(syntaxTree);
-            var variables = new Dictionary<Variable, object>();
+            var variables = new Dictionary<VariableSymbol, object>();
             var result = compilation.Evaluate(variables);
             
             Assert.Empty(result.Errors);
