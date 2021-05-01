@@ -6,6 +6,7 @@ using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Evaluator;
 using MadLad.Compiler.CodeAnalysis.Syntax;
 using MadLad.Compiler.CodeAnalysis.Syntax.Lexer;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad
@@ -46,11 +47,14 @@ namespace MadLad
         private string defaultprompt;
         private Compilation previous;
 
+        /**
+         * Run the REPL
+         */
         public void Run()
         {
             defaultprompt = Prompt;
             
-            var variables = new Dictionary<Variable, object>();
+            var variables = new Dictionary<VariableSymbol, object>();
             var textbuilder = new StringBuilder();
 
             Console.WriteLine("MadLad Compooler but its a REPL instead");

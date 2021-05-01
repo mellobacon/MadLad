@@ -1,4 +1,5 @@
 ﻿using System;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
@@ -14,6 +15,6 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
         }
 
         public override BoundKind Kind => BoundKind.UnaryExpression;
-        public override Type Type => Op.ResultType;
+        public override TypeSymbol Type => Op.ResultType;
     }
 }

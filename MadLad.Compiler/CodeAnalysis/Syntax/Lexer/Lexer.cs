@@ -1,4 +1,5 @@
 ﻿using MadLad.Compiler.CodeAnalysis.ErrorReporting;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
@@ -277,7 +278,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             {
                 if (!float.TryParse(text, out var value))
                 {
-                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, typeof(float));
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, TypeSymbol.Float);
                 }
                 Value = value;   
             }
@@ -285,7 +286,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             {
                 if (!int.TryParse(text, out var value))
                 {
-                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, typeof(int));
+                    ErrorList.ReportInvalidNumber(new TextSpan(Start, length), text, TypeSymbol.Int);
                 }
                 Value = value;
             }

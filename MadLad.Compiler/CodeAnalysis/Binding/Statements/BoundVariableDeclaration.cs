@@ -1,14 +1,15 @@
 ﻿using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Statements
 {
     internal sealed class BoundVariableDeclaration : BoundStatement
     {
-        public readonly Variable Variable;
+        public readonly VariableSymbol Variable;
         public readonly BoundExpression Expression;
 
-        public BoundVariableDeclaration(Variable variable, BoundExpression expression)
+        public BoundVariableDeclaration(VariableSymbol variable, BoundExpression expression)
         {
             Variable = variable;
             Expression = expression;

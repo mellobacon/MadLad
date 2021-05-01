@@ -1,5 +1,5 @@
-﻿using System;
-using MadLad.Compiler.CodeAnalysis.Syntax;
+﻿using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
@@ -7,15 +7,15 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
     {
         private readonly SyntaxKind SyntaxKind;
         public readonly BinaryBoundOperatorKind BoundKind;
-        private readonly Type LeftType;
-        private readonly Type RightType;
-        public readonly Type ResultType;
+        private readonly TypeSymbol LeftType;
+        private readonly TypeSymbol RightType;
+        public readonly TypeSymbol ResultType;
 
-        private BinaryBoundOperator(SyntaxKind syntaxKind, BinaryBoundOperatorKind kind, Type type) : this(syntaxKind, kind, type, type, type) { }
+        private BinaryBoundOperator(SyntaxKind syntaxKind, BinaryBoundOperatorKind kind, TypeSymbol TypeSymbol) : this(syntaxKind, kind, TypeSymbol, TypeSymbol, TypeSymbol) { }
 
-        private BinaryBoundOperator(SyntaxKind syntaxKind, BinaryBoundOperatorKind kind, Type operandType, Type resultType) 
+        private BinaryBoundOperator(SyntaxKind syntaxKind, BinaryBoundOperatorKind kind, TypeSymbol operandType, TypeSymbol resultType) 
             : this(syntaxKind, kind, operandType, operandType, resultType) { }
-        private BinaryBoundOperator(SyntaxKind syntaxkind, BinaryBoundOperatorKind boundkind, Type lefttype, Type righttype, Type resulttype)
+        private BinaryBoundOperator(SyntaxKind syntaxkind, BinaryBoundOperatorKind boundkind, TypeSymbol lefttype, TypeSymbol righttype, TypeSymbol resulttype)
         {
             SyntaxKind = syntaxkind;
             BoundKind = boundkind;
@@ -26,50 +26,50 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
         private static readonly BinaryBoundOperator[] operations =
         {
-            new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, typeof(int)),
-            new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, typeof(float)),
+            new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, TypeSymbol.Int),
+            new(SyntaxKind.PlusToken, BinaryBoundOperatorKind.Addition, TypeSymbol.Float),
 
-            new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, typeof(int)),
-            new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, typeof(float)),
+            new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, TypeSymbol.Int),
+            new(SyntaxKind.MinusToken, BinaryBoundOperatorKind.Subtraction, TypeSymbol.Float),
 
-            new(SyntaxKind.SlashToken, BinaryBoundOperatorKind.Division, typeof(int)),
-            new(SyntaxKind.SlashToken, BinaryBoundOperatorKind.Division, typeof(float)),
+            new(SyntaxKind.SlashToken, BinaryBoundOperatorKind.Division, TypeSymbol.Int),
+            new(SyntaxKind.SlashToken, BinaryBoundOperatorKind.Division, TypeSymbol.Float),
 
-            new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, typeof(int)),
-            new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, typeof(float)),
+            new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, TypeSymbol.Int),
+            new(SyntaxKind.StarToken, BinaryBoundOperatorKind.Multiplication, TypeSymbol.Float),
             
-            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, typeof(int)),
-            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, typeof(float)),
+            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, TypeSymbol.Int),
+            new(SyntaxKind.ModuloToken, BinaryBoundOperatorKind.Modulo, TypeSymbol.Float),
             
-            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, typeof(int)),
-            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, typeof(float)),
+            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, TypeSymbol.Int),
+            new(SyntaxKind.StarStarToken, BinaryBoundOperatorKind.Pow, TypeSymbol.Float),
 
-            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int)),
-            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float)),
-            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(bool)),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, TypeSymbol.Int),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, TypeSymbol.Float),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, TypeSymbol.Bool),
 
-            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(int), typeof(bool)),
-            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, typeof(float), typeof(bool)),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.EqualsEqualsToken, BinaryBoundOperatorKind.Equals, TypeSymbol.Float, TypeSymbol.Bool),
 
-            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(bool)),
-            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(int), typeof(bool)),
-            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, typeof(float), typeof(bool)),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, TypeSymbol.Bool),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.NotEqualsToken, BinaryBoundOperatorKind.NotEquals, TypeSymbol.Float, TypeSymbol.Bool),
             
-            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, typeof(int), typeof(bool)),
-            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, typeof(int), typeof(bool)),
-            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, typeof(float), typeof(bool)),
-            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, typeof(float), typeof(bool)),
+            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.LessThanToken, BinaryBoundOperatorKind.LessThan, TypeSymbol.Float, TypeSymbol.Bool),
+            new(SyntaxKind.GreaterThanToken, BinaryBoundOperatorKind.GreaterThan, TypeSymbol.Float, TypeSymbol.Bool),
             
-            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, typeof(int), typeof(bool)),
-            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, typeof(int), typeof(bool)),
-            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, typeof(float), typeof(bool)),
-            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, typeof(float), typeof(bool)),
+            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, TypeSymbol.Int, TypeSymbol.Bool),
+            new(SyntaxKind.LessEqualsToken, BinaryBoundOperatorKind.LessOrEqual, TypeSymbol.Float, TypeSymbol.Bool),
+            new(SyntaxKind.GreatEqualsToken, BinaryBoundOperatorKind.GreaterOrEqual, TypeSymbol.Float, TypeSymbol.Bool),
 
-            new(SyntaxKind.AndAmpersandToken, BinaryBoundOperatorKind.LogicalAnd, typeof(bool)),
-            new(SyntaxKind.OrPipeToken, BinaryBoundOperatorKind.LogicalOr, typeof(bool)),
+            new(SyntaxKind.AndAmpersandToken, BinaryBoundOperatorKind.LogicalAnd, TypeSymbol.Bool),
+            new(SyntaxKind.OrPipeToken, BinaryBoundOperatorKind.LogicalOr, TypeSymbol.Bool),
         };
 
-        public static BinaryBoundOperator Bind(Type leftType, SyntaxKind kind, Type rightType)
+        public static BinaryBoundOperator Bind(TypeSymbol leftType, SyntaxKind kind, TypeSymbol rightType)
         {
             foreach (var op in operations)
             {

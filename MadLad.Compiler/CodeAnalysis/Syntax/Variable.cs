@@ -1,13 +1,14 @@
 ﻿using System;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax
 {
     public class Variable
     {
-        public readonly string Name;
-        public readonly Type Type;
+        private readonly string Name;
+        private readonly TypeSymbol Type;
         
-        internal Variable(string name, Type type)
+        internal Variable(string name, TypeSymbol type)
         {
             Name = name;
             Type = type;

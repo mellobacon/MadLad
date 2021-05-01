@@ -4,6 +4,7 @@ using MadLad.Compiler.CodeAnalysis.Binding;
 using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
 using MadLad.Compiler.CodeAnalysis.Binding.Statements;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
@@ -11,9 +12,9 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
     internal sealed class Evaluator
     {
         private readonly BoundStatement Root;
-        private readonly Dictionary<Variable, object> Variables;
+        private readonly Dictionary<VariableSymbol, object> Variables;
         object LastValue;
-        public Evaluator(BoundStatement root, Dictionary<Variable, object> variables)
+        public Evaluator(BoundStatement root, Dictionary<VariableSymbol, object> variables)
         {
             Root = root;
             Variables = variables;
@@ -61,14 +62,32 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     
                     break;
                 case WhileBoundStatement w:
+                    try
+                    {
+                        var c = (bool)EvaluateExpression(w.Condition);
+                    }
+                    catch (Exception e)
+                    {
+                        break;
+                    }
                     while ((bool)EvaluateExpression(w.Condition))
                     {
                         EvaluateStatement(w.Statement);
                     }
-                    
+
                     break;
                 case ForBoundStatement f:
                     EvaluateStatement(f.Initialization);
+                    
+                    try
+                    {
+                        var c = (bool)EvaluateExpression(f.Condition);
+                    }
+                    catch (Exception e)
+                    {
+                        break;
+                    }
+                    
                     while ((bool)EvaluateExpression(f.Condition))
                     {
                         EvaluateStatement(f.Statement);
@@ -192,6 +211,12 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     var value = Variables[v.Variable];
                     return value;
                 }
+
+                case ErrorBoundExpression e:
+                {
+                    return e;
+                }
+                
                 default:
                     throw new Exception($"Unexpected node {root.Kind}");
             }

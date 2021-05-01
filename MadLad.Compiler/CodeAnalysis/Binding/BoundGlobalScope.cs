@@ -2,6 +2,7 @@
 using MadLad.Compiler.CodeAnalysis.Binding.Statements;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
@@ -9,11 +10,11 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
     {
         public readonly BoundGlobalScope Previous;
         public readonly ImmutableArray<Error> Errors;
-        public readonly ImmutableArray<Variable> Variables;
+        public readonly ImmutableArray<VariableSymbol> Variables;
         public readonly BoundStatement Statement;
 
         public BoundGlobalScope(BoundGlobalScope previous, ImmutableArray<Error> errors, 
-            ImmutableArray<Variable> variables, BoundStatement statement)
+            ImmutableArray<VariableSymbol> variables, BoundStatement statement)
         {
             Previous = previous;
             Errors = errors;

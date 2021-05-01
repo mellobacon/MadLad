@@ -7,6 +7,7 @@ using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding
 {
@@ -61,14 +62,14 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
         private BoundStatement BindWhileStatement(WhileStatement syntax)
         {
-            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
             var statement = BindStatement(syntax.Dostatement);
             return new WhileBoundStatement(condition, statement);
         }
 
         private BoundStatement BindIfStatement(IfStatement syntax)
         {
-            var condition = BindExpression(syntax.Condition, typeof(bool));
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
             var statement = BindStatement(syntax.Thenstatement);
             var elsestatement = syntax.Elsestatement == null ? null : BindStatement(syntax.Elsestatement
                 .Elsestatement);
@@ -97,11 +98,12 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
 
         private BoundStatement BindVariableDeclaration(VariableDeclaration syntax)
         {
-            var name = syntax.Variable.Text;
+            var name = syntax.Variable.Text ?? "undefined";
+            var declare = !syntax.Variable.IsMissing;
             var expression = BindExpression(syntax.Expression);
-            var variable = new Variable(name, expression.Type);
+            var variable = new VariableSymbol(name, expression.Type);
 
-            if (!Scope.TryDeclare(variable))
+            if (declare && !Scope.TryDeclare(variable))
             {
                 ErrorList.ReportVariableAlreadyExists(syntax.Variable.Span, name);
             }
@@ -109,12 +111,14 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             return new BoundVariableDeclaration(variable, expression);
         }
 
-        private BoundExpression BindExpression(ExpressionSyntax syntax, Type target)
+        private BoundExpression BindExpression(ExpressionSyntax syntax, TypeSymbol target)
         {
             var result = BindExpression(syntax);
             if (result.Type != target)
             {
                 // return conversion error
+                ErrorList.ReportCannotConvertType(result.Type, target);
+                return new ErrorBoundExpression();
             }
 
             return result;
@@ -144,11 +148,16 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         {
             var boundleft = BindExpression(syntax.Left);
             var boundright = BindExpression(syntax.Right);
+            if (boundleft.Type == TypeSymbol.Error || boundright.Type == TypeSymbol.Error)
+            {
+                return new ErrorBoundExpression();
+            }
+            
             var boundoperator = BinaryBoundOperator.Bind(boundleft.Type, syntax.Op.Kind, boundright.Type);
             if (boundoperator == null)
             {
                 ErrorList.ReportUndefinedBinaryOperator(syntax.Op.Span, syntax.Op.Text, boundleft.Type, boundright.Type);
-                return boundleft;
+                return new ErrorBoundExpression();
             }
             return new BinaryBoundExpression(boundleft, boundoperator, boundright);
         }
@@ -156,11 +165,16 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
         private BoundExpression BindUnaryExpression(UnaryExpression syntax)
         {
             var boundoperand = BindExpression(syntax.Operand);
+            if (boundoperand.Type == TypeSymbol.Error)
+            {
+                return new ErrorBoundExpression();
+            }
+            
             var boundoperator = UnaryBoundOperator.Bind(syntax.OpToken.Kind, boundoperand.Type);
             if (boundoperator == null)
             {
                 ErrorList.ReportUndefinedUnaryOperator(syntax.OpToken.Span, syntax.OpToken.Text, boundoperand.Type);
-                return boundoperand;
+                return new ErrorBoundExpression();
             }
             return new UnaryBoundExpression(boundoperator, boundoperand);
         }
@@ -199,12 +213,12 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
             var name = syntax.IdentifierToken.Text;
             if (string.IsNullOrEmpty(name))
             {
-                return new LiteralBoundExpression(0);
+                return new ErrorBoundExpression();
             }
             if (!Scope.TryLookup(name, out var variable))
             {
                 ErrorList.ReportUndefinedName(syntax.IdentifierToken.Span, name);
-                return new LiteralBoundExpression(0);
+                return new ErrorBoundExpression();
             }
             
             return new VariableBoundExpression(variable);

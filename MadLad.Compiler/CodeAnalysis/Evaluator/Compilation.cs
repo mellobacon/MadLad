@@ -5,6 +5,7 @@ using System.Threading;
 using MadLad.Compiler.CodeAnalysis.Binding;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Evaluator
 {
@@ -47,7 +48,7 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
             return new (this, tree);
         }
 
-        public EvaluationResult Evaluate(Dictionary<Variable, object> variables)
+        public EvaluationResult Evaluate(Dictionary<VariableSymbol, object> variables)
         {
             // Get the expression
             var globalScope = GlobalScope;

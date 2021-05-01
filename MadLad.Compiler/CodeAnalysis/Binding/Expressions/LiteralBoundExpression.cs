@@ -1,4 +1,5 @@
 ﻿using System;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 
 namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
 {
@@ -10,9 +11,17 @@ namespace MadLad.Compiler.CodeAnalysis.Binding.Expressions
         public LiteralBoundExpression(object value)
         {
             Value = value;
+            Type = value switch
+            {
+                bool => TypeSymbol.Bool,
+                int => TypeSymbol.Int,
+                float => TypeSymbol.Float,
+                string => TypeSymbol.String,
+                _ => throw new Exception($"Unexpected literal '{Value}' of type {Value.GetType()}")
+            };
         }
 
         public override BoundKind Kind => BoundKind.LiteralExpression;
-        public override Type Type => Value.GetType();
+        public override TypeSymbol Type { get; }
     }
 }
