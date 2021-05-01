@@ -11,6 +11,8 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax
         public readonly object Value;
         public readonly int Position;
         public TextSpan Span => new(Position, Text.Length);
+
+        public bool IsMissing => Text == null;
         
         /// <summary>
         /// Defines what components make up a syntax token.
