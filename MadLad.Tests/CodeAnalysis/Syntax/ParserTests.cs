@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using MadLad.Compiler.CodeAnalysis.Syntax;
+using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
+using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
 using Xunit;
 
 namespace MadLad.Tests.CodeAnalysis.Syntax
@@ -15,7 +17,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             var op1Text = SyntaxPrecedences.GetText(op1);
             var op2Text = SyntaxPrecedences.GetText(op2);
             var text = $"a {op1Text} b {op2Text} c";
-            var expression = SyntaxTree.Parse(text).Root;
+            var expression = ParseExpression(text);
             if (op1Precendence >= op2Precendence)
             {
                 using var e = new AssertingEnumerator(expression);
@@ -55,7 +57,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             var unaryText = SyntaxPrecedences.GetText(unarykind);
             var binaryText = SyntaxPrecedences.GetText(binarykind);
             var text = $"{unaryText} a {binaryText} b";
-            var expression = SyntaxTree.Parse(text).Root;
+            var expression = ParseExpression(text);
             if (unaryPrecendence >= binaryPrecendence)
             {
                 using var e = new AssertingEnumerator(expression);
@@ -80,6 +82,14 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
                 e.AssertNode(SyntaxKind.NameExpression);
                 e.AssertToken(SyntaxKind.VariableToken, "b");
             }
+        }
+
+        private static ExpressionSyntax ParseExpression(string text)
+        {
+            var tree = SyntaxTree.Parse(text);
+            var root = tree.Root;
+            var statement = root.Expression;
+            return Assert.IsType<ExpressionStatement>(statement).Expression;
         }
 
         public static IEnumerable<object[]> GetBinaryOperatorPairsData()

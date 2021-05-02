@@ -90,6 +90,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             };
         }
 
+        // get every valid token besides whitespace and eof. and bad
         private static IEnumerable<(SyntaxKind kind, string text)> GetTokens()
         {
             return new[]
@@ -98,6 +99,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.MinusToken, "-"),
                 (SyntaxKind.StarToken, "*"),
                 (SyntaxKind.SlashToken, "/"),
+                (SyntaxKind.ModuloToken, "%"),
 
                 (SyntaxKind.OpenParenToken, "("),
                 (SyntaxKind.CloseParenToken, ")"),
@@ -109,9 +111,15 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.OrPipeToken, "||"),
                 (SyntaxKind.EqualsEqualsToken, "=="),
                 (SyntaxKind.NotEqualsToken, "!="),
+                
+                (SyntaxKind.PlusEqualsToken, "+="),
+                (SyntaxKind.MinusEqualsToken, "-="),
+                (SyntaxKind.StarEqualsToken, "*="),
+                (SyntaxKind.SlashEqualsToken, "/="),
+                (SyntaxKind.ModuloEqualsToken, "%="),
 
-                (SyntaxKind.FalseKeyword, "false"),
-                (SyntaxKind.TrueKeyword, "true"),
+                (SyntaxKind.FalseKeyword, "NO"),
+                (SyntaxKind.TrueKeyword, "FINE"),
                 
                 (SyntaxKind.NumberToken, "1"),
                 (SyntaxKind.NumberToken, "123"),
@@ -123,6 +131,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             };
         }
 
+        // checks if there is a token that needs a space inbetween (like ==false)
         private static bool RequiresSeparator(SyntaxKind kind1, SyntaxKind kind2)
         {
             var keyword1 = kind1.ToString().EndsWith("Keyword");
@@ -184,6 +193,58 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             }
 
             if (kind1 == SyntaxKind.VariableToken && kind2 == SyntaxKind.NumberToken)
+            {
+                return true;
+            }
+
+            if (kind1 == SyntaxKind.MinusToken && kind2 == SyntaxKind.EqualsEqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.PlusToken && kind2 == SyntaxKind.EqualsEqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.SlashToken && kind2 == SyntaxKind.EqualsEqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.EqualsEqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.ModuloToken && kind2 == SyntaxKind.EqualsEqualsToken)
+            {
+                return true;
+            }
+            
+            //
+            
+            if (kind1 == SyntaxKind.MinusToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.PlusToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.SlashToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                return true;
+            }
+            
+            if (kind1 == SyntaxKind.ModuloToken && kind2 == SyntaxKind.EqualsToken)
             {
                 return true;
             }
