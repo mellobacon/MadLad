@@ -100,6 +100,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.StarToken, "*"),
                 (SyntaxKind.SlashToken, "/"),
                 (SyntaxKind.ModuloToken, "%"),
+                (SyntaxKind.StarStarToken, "**"),
 
                 (SyntaxKind.OpenParenToken, "("),
                 (SyntaxKind.CloseParenToken, ")"),
@@ -169,7 +170,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             
             if (kind1 == SyntaxKind.BangToken && kind2 == SyntaxKind.EqualsToken)
             {
-                return true;
+                //return true;
             }
             
             if (kind1 == SyntaxKind.BangToken && kind2 == SyntaxKind.EqualsEqualsToken)
@@ -179,7 +180,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             
             if (kind1 == SyntaxKind.EqualsToken && kind2 == SyntaxKind.EqualsToken)
             {
-                return true;
+                //return true;
             }
             
             if (kind1 == SyntaxKind.EqualsToken && kind2 == SyntaxKind.EqualsEqualsToken)
@@ -188,6 +189,16 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             }
             
             if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.StarToken)
+            {
+                //return true;
+            }
+            
+            if (kind1 == SyntaxKind.StarStarToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                //return true;
+            }
+            
+            if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.StarStarToken)
             {
                 return true;
             }

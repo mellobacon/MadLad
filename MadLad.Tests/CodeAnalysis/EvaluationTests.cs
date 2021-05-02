@@ -24,15 +24,13 @@ namespace MadLad.Tests.CodeAnalysis
         [InlineData("!FINE;", false)]
         [InlineData("FINE == FINE;", true)]
         [InlineData("FINE == NO;", false)]
-        [InlineData("a = 10;", 10)]
-        [InlineData("(a = 10);", 10)]
         [InlineData("1 + 2 * 3;", 7)]
         [InlineData("(1 + 2) * 3;", 9)]
         [InlineData("FINE;", true)]
         [InlineData("NO;", false)]
         [InlineData("---1;", -1)]
         [InlineData("FINE && FINE;", true)]
-        [InlineData("NO || FALSE;", true)]
+        [InlineData("NO || FINE;", true)]
         [InlineData("FINE && NO;", false)]
         public void SyntaxFact_GetText_RoundTrips(string text, object expectedValue)
         {
