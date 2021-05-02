@@ -398,7 +398,7 @@ namespace MadLad
                 Console.ResetColor();
 
                 // Prevent it from trying to highlight an empty token
-                if (error.Details.Contains("Unexpected token <EOFToken>"))
+                if (error.Details.Contains("Unexpected token <EOFToken>") || error.Details.Contains("expected <EOFToken>"))
                 {
                     Console.WriteLine();
                     break;
