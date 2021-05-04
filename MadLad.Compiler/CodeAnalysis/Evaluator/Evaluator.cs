@@ -51,6 +51,14 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     
                     break;
                 case IfBoundStatement f:
+                    try
+                    {
+                        var _ = (bool)EvaluateExpression(f.Conditiion);
+                    }
+                    catch (Exception )
+                    {
+                        break;
+                    }
                     var condition = (bool)EvaluateExpression(f.Conditiion);
                     if (condition)
                     {
