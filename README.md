@@ -4,7 +4,7 @@
 
 <h1 align="center"> <img src="https://forthebadge.com/images/badges/made-with-c-sharp.svg"> <img src="https://forthebadge.com/images/badges/you-didnt-ask-for-this.svg"></h1>
 
-MadLad is an esolang meant to be similar to C# but with a twist. MadLad is a very angry language and will yell at you for everything. Featuring screaming syntax and unhelpful   error messages, this language hates everything and will express it with rage.
+MadLad is an esolang (a joke programming language) meant to be similar to C# but with a twist. MadLad is a very angry language and will yell at you for everything. Featuring screaming syntax and unhelpful   error messages, this language hates everything and will express it with rage.
 
 MadLad is a work in progress. Feel free to star the project if you want to follow the development.
 
