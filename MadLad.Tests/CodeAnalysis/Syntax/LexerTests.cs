@@ -129,6 +129,9 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.VariableToken, "a"),
                 (SyntaxKind.VariableToken, "abc"),
                 (SyntaxKind.VariableToken, "a_b_3"),
+                
+                (SyntaxKind.StringToken, "\"something\""),
+                (SyntaxKind.StringToken, "\"some thing\""),
             };
         }
 
@@ -170,7 +173,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             
             if (kind1 == SyntaxKind.BangToken && kind2 == SyntaxKind.EqualsToken)
             {
-                //return true;
+                return true;
             }
             
             if (kind1 == SyntaxKind.BangToken && kind2 == SyntaxKind.EqualsEqualsToken)
@@ -180,7 +183,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             
             if (kind1 == SyntaxKind.EqualsToken && kind2 == SyntaxKind.EqualsToken)
             {
-                //return true;
+                return true;
             }
             
             if (kind1 == SyntaxKind.EqualsToken && kind2 == SyntaxKind.EqualsEqualsToken)
@@ -190,7 +193,7 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             
             if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.StarToken)
             {
-                //return true;
+                return true;
             }
             
             if (kind1 == SyntaxKind.StarStarToken && kind2 == SyntaxKind.EqualsToken)
@@ -256,6 +259,11 @@ namespace MadLad.Tests.CodeAnalysis.Syntax
             }
             
             if (kind1 == SyntaxKind.ModuloToken && kind2 == SyntaxKind.EqualsToken)
+            {
+                return true;
+            }
+
+            if (kind1 == SyntaxKind.StarToken && kind2 == SyntaxKind.StarEqualsToken)
             {
                 return true;
             }

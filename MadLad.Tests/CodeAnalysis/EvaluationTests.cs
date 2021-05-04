@@ -32,6 +32,8 @@ namespace MadLad.Tests.CodeAnalysis
         [InlineData("FINE && FINE;", true)]
         [InlineData("NO || FINE;", true)]
         [InlineData("FINE && NO;", false)]
+        [InlineData("\"get\";", "\"get\"")]
+        [InlineData("\"get got\";", "\"get got\"")]
         public void SyntaxFact_GetText_RoundTrips(string text, object expectedValue)
         {
             var syntaxTree = SyntaxTree.Parse(text);
