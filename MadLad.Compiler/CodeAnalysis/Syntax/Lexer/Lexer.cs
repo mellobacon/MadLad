@@ -328,7 +328,7 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Lexer
             {
                 case '"':
                     Advance(1);
-                    while (char.IsLetter(Current) ||char.IsWhiteSpace(Current))
+                    while (char.IsLetter(Current) ||char.IsWhiteSpace(Current) || char.IsNumber(Current))
                     {
                         Advance(1);
                     }
