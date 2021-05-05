@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using MadLad.Compiler.CodeAnalysis.Binding.Expressions;
 using MadLad.Compiler.CodeAnalysis.Binding.Statements;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
@@ -134,8 +135,49 @@ namespace MadLad.Compiler.CodeAnalysis.Binding
                 SyntaxKind.GroupedExpression => BindGroupedExpression((GroupedExpression)syntax),
                 SyntaxKind.AssignmentExpression => BindAssignmentExpression((AssignmentExpression)syntax),
                 SyntaxKind.NameExpression => BindNameExpression((NameExpression)syntax),
+                SyntaxKind.MethodExpression => BindMethodExpression((MethodCallExpression)syntax),
                 _ => throw new Exception($"Unexpected syntax {syntax.Kind}")
             };
+        }
+
+        private BoundExpression BindMethodExpression(MethodCallExpression syntax)
+        {
+            var boundArgs = ImmutableArray.CreateBuilder<BoundExpression>();
+            
+            foreach (var arg in syntax.Args)
+            {
+                var boundArg = BindExpression(arg);
+                boundArgs.Add(boundArg);
+            }
+            
+            var functions = BuiltinFunctions.GetAll();
+            var function = functions.SingleOrDefault(f => f.Name == syntax.Identifier.Text);
+            if (function == null)
+            {
+                // report undefined function
+                ErrorList.ReportUndefinedMethod(syntax.Identifier.Span, syntax.Identifier.Text);
+                return new ErrorBoundExpression();
+            }
+            if (syntax.Args.Count != function.Parameter.Length)
+            {
+                // report invalid arg count
+                return new ErrorBoundExpression();
+            }
+            
+            for (var i = 0; i < syntax.Args.Count; i++)
+            {
+                var argument = boundArgs[i];
+                var parameter = function.Parameter[i];
+
+                if (argument.Type != parameter.Type)
+                {
+                    // report invalid method type
+                    ErrorList.ReportInvalidMethodType(syntax.Identifier.Span, argument.Type, function.Type);
+                    return new ErrorBoundExpression();
+                }
+            }
+
+            return new MethodBoundExpression(function, boundArgs.ToImmutable());
         }
 
         private static BoundExpression BindLiteralExpression(LiteralExpression syntax)

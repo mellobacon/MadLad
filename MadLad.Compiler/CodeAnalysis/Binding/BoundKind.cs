@@ -16,6 +16,7 @@
         UnaryExpression,
         AssignmentExpression,
         VariableExpression,
+        MethodExpression,
         ErrorExpression
     }
 }
