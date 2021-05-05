@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using MadLad.Compiler.CodeAnalysis.ErrorReporting;
 using MadLad.Compiler.CodeAnalysis.Syntax.Expressions;
 using MadLad.Compiler.CodeAnalysis.Syntax.Statements;
+using MadLad.Compiler.CodeAnalysis.Syntax.Symbols;
 using MadLad.Compiler.CodeAnalysis.Syntax.Text;
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
@@ -37,7 +38,6 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                 }
             } while (token.Kind != SyntaxKind.EOFToken);
             Tokens = tokens.ToImmutableArray();
-            
             ErrorList.AddRange(lexer.Errors); // add any errors while lexing to the error list
         }
 
@@ -149,6 +149,35 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
             return new VariableDeclaration(keyword, variable, equals, expression, semicolon);
         }
 
+        private ExpressionSyntax ParseMethodOrVariableExpression()
+        {
+            // if writing a method parse that
+            if (Current.Kind == SyntaxKind.VariableToken && Peek(1).Kind == SyntaxKind.OpenParenToken)
+            {
+                var identifier = MatchToken(SyntaxKind.VariableToken);
+                var openparen = MatchToken(SyntaxKind.OpenParenToken);
+                var args = ParseArgs();
+                var closedparen = MatchToken(SyntaxKind.CloseParenToken);
+                return new MethodCallExpression(identifier, openparen, args, closedparen);
+            }
+
+            // else its a variable. parse that
+            var variable = NextToken();
+            return new NameExpression(variable);
+        }
+
+        private SeperatedSyntaxList<ExpressionSyntax> ParseArgs()
+        {
+            var nodesandseparators = ImmutableArray.CreateBuilder<SyntaxNode>();
+            while (Current.Kind != SyntaxKind.CloseParenToken && Current.Kind != SyntaxKind.EOFToken)
+            {
+                var expression = ParsePrimaryExpression();
+                nodesandseparators.Add(expression);
+            }
+
+            return new SeperatedSyntaxList<ExpressionSyntax>(nodesandseparators.ToImmutable());
+        }
+
         private ExpressionSyntax ParseAssignmentExpression()
         {
             // if something is being assigned to a variable parse that
@@ -224,18 +253,17 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Parser
                     var keywordToken = NextToken();
                     var value = keywordToken.Kind == SyntaxKind.TrueKeyword;
                     return new LiteralExpression(keywordToken, value);
-                // variables
-                case SyntaxKind.VariableToken:
-                    var variable = NextToken();
-                    return new NameExpression(variable);
                 // strings
                 case SyntaxKind.StringToken:
                     var stringtoken = MatchToken(SyntaxKind.StringToken);
                     return new LiteralExpression(stringtoken);
-                // default to reading a number
-                default:
+                // numbers
+                case SyntaxKind.NumberToken:
                     var numbertoken = MatchToken(SyntaxKind.NumberToken);
                     return new LiteralExpression(numbertoken);
+                // default to reading a method/variable
+                default:
+                    return ParseMethodOrVariableExpression();
             }
         }
 

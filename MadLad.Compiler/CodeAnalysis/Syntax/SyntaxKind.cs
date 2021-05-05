@@ -56,6 +56,7 @@
         UnaryExpression,
         AssignmentExpression,
         NameExpression,
+        MethodExpression,
         
         // Statements
         BlockStatement,
