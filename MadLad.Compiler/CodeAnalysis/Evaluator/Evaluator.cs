@@ -225,6 +225,28 @@ namespace MadLad.Compiler.CodeAnalysis.Evaluator
                     var value = Variables[v.Variable];
                     return value;
                 }
+                
+                case MethodBoundExpression m:
+                    if (m.Function == BuiltinFunctions.PrintString)
+                    {
+                        var message = (string)EvaluateExpression(m.Args[0]);
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.WriteLine(message);
+                        Console.ResetColor();
+                        return null;
+                    }
+                    if (m.Function == BuiltinFunctions.PrintInt)
+                    {
+                        var message = (int)EvaluateExpression(m.Args[0]);
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        Console.Write(message);
+                        Console.ResetColor();
+                        return null;
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid function {m.Function}");
+                    }
 
                 case ErrorBoundExpression e:
                 {
