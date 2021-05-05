@@ -74,5 +74,17 @@ namespace MadLad.Compiler.CodeAnalysis.ErrorReporting
             var message = $"Cannot convert type '{from}' to type '{to}'";
             Report(new TextSpan(), message);
         }
+
+        public void ReportUndefinedMethod(TextSpan span, string name)
+        {
+            var message = $"'{name}' is not a valid function";
+            Report(span, message);
+        }
+
+        public void ReportInvalidMethodType(TextSpan span, TypeSymbol from, TypeSymbol to)
+        {
+            var message = $"Method type takes a {to} but its a {from}";
+            Report(span, message);
+        }
     }
 }
