@@ -2,7 +2,7 @@
 
 namespace MadLad.Compiler.CodeAnalysis.Syntax.Symbols
 {
-    public class VariableSymbol : TypeSymbol
+    public class VariableSymbol : Symbol
     {
         public readonly TypeSymbol Type;
 
@@ -11,6 +11,6 @@ namespace MadLad.Compiler.CodeAnalysis.Syntax.Symbols
             Type = type;
         }
 
-        public override string ToString() => Name;
+        protected override SymbolKind Kind => SymbolKind.Variable;
     }
 }

@@ -4,13 +4,13 @@
     {
         public readonly string Name;
 
-        protected abstract SymbolKind Kind { get; }
-
         private protected Symbol(string name)
         {
             Name = name;
         }
 
+        protected abstract SymbolKind Kind { get; }
+        
         public override string ToString() => Name;
     }
 }
